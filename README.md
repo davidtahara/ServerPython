@@ -8,7 +8,7 @@ Foi escolhido utilizar o Python como linguagem da API pelo motivo da linguagem t
 
 A instalação do projeto é extremamente simples, basta ter o Python 3.1.\* instalado na máquina e rodar o seguinte comando na raiz do projeto.
 
-`pip install requirements.txt`
+`pip install -r requirements.txt`
 
 Esse comando irá instalar todas as dependências do projeto.
 
@@ -18,7 +18,7 @@ Para rodar a API é preciso entrar no arquivo **main.py** e executar o arquivo,
 se estiver usando uma IDE, é preciso descobrir como a IDE roda arquivos Python,
 caso queira rodar no terminal, execute o seguinte comando:
 
-`python3 main.py`
+`python -u main.py`
 
 # Documentação
 
