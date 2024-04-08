@@ -20,6 +20,10 @@ caso queira rodar no terminal, execute o seguinte comando:
 
 `python -u main.py`
 
+# Trabalhos
+
+Dentro da pasta Modules o grupo deve fazer uma copia da pasta Grupo1 e fazer as alterações necessárias para identificação do grupo, sendo grupo+número
+
 # Documentação
 
 Para acessar a documentação do FastApi é preciso acessar a seguinte url no navegador:
@@ -30,7 +34,7 @@ Onde {url} é onde o FastApi está rodando no seu sistema.
 
 # Contribuições
 
-Toda contribuição é bem-vinda para o projeto, basta enviar uma Pull Request
+Toda contribuição é bem-vinda para o projeto, basta enviar uma Pull Request de um fork feito na sua conta do Github
 
 # Créditos
 

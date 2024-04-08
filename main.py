@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 # Pega as variaveis de ambiente
 from dotenv import load_dotenv
@@ -11,6 +12,15 @@ porta = int(os.getenv("PORT"))
 
 # Inicializa o FastAPI
 app = FastAPI()
+
+# Adiciona o CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Faz a importação de todos os modulos
 # Pega todas as pastas dentro de modules
