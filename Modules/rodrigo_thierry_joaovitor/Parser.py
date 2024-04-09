@@ -218,11 +218,11 @@ class PacketSource:
         Le todos os pcap da pasta captures e retorna uma lista de pacotes IP
         '''
 
-        arquivos = os.listdir('../captures')
+        arquivos = os.listdir('./pcaps')
         output = []
         for arquivo in arquivos:
             print("Lendo arquivo: ", arquivo)
-            packets = self.readPackets(f'../captures/{arquivo}')
+            packets = self.readPackets(f'./pcaps/{arquivo}')
             for packet in packets:
                 pkt: Packet = Packet.convert(packet)
                 if pkt is None:

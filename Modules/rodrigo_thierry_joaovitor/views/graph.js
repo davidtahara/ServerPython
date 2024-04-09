@@ -1,11 +1,11 @@
 async function getSenders(){
-    const response = await fetch('http://127.0.0.1:8000/enviados/list');
+    const response = await fetch('http://127.0.0.1:3001/grupo_rodrigo_thierry_joao/t1/enviados/list');
     const data = await response.json();
     return data;
 }
 
 async function getRelatorio(ip){
-    const response = await fetch('http://127.0.0.1:8000/relatorio/simples/'+ip);
+    const response = await fetch('http://127.0.0.1:3001/grupo_rodrigo_thierry_joao/t1/relatorio/simples/'+ip);
     const data = await response.json();
     return data;
 }

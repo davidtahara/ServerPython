@@ -4,7 +4,7 @@ const body = document.querySelector('body');
 let data = null;
 
 async function getSenders() {
-    const response = await fetch('http://127.0.0.1:8000/enviados/list');
+    const response = await fetch('http://127.0.0.1:3001/grupo_rodrigo_thierry_joao/t1/enviados/list');
     const data = await response.json();
     const ul = document.createElement('ul');
 
@@ -18,7 +18,7 @@ async function getSenders() {
         li.addEventListener('click', async function () {
             let conteiner = document.getElementById("headers");
             conteiner.innerHTML = '';
-            await fetch('http://127.0.0.1:8000/enviados/' + data[i])
+            await fetch('http://127.0.0.1:3001/grupo_rodrigo_thierry_joao/t1/enviados/' + data[i])
                 .then(response => response.json())
                 .then(data => {
                     for (let i in data) {
@@ -152,7 +152,7 @@ const formatString = (template, args) => {
 }
 
 async function teste() {
-    let a = await fetch('http://127.0.0.1:8000/enviados/2.1.1.2')
+    let a = await fetch('http://127.0.0.1:3001/grupo_rodrigo_thierry_joao/t1/enviados/2.1.1.2')
     let b = await a.json()
     document.getElementsByTagName("body")[0].innerHTML = formatString(ip_header_template, b[0])
     console.log(b[0])
