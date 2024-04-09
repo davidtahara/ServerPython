@@ -22,7 +22,7 @@ caso queira rodar no terminal, execute o seguinte comando:
 
 # Trabalhos
 
-Dentro da pasta Modules o grupo deve fazer uma copia da pasta Grupo1 e fazer as alterações necessárias para identificação do grupo, sendo grupo+número
+Dentro da pasta Modules o grupo deve fazer uma copia da pasta Grupo1 e fazer as alterações necessárias para identificação do grupo, sendo primeironomemembro1_primeironomemembro2_primeironomemembro3. No arquivo membros.mb coloquem uma lista com os nomes completos dos membros.
 
 # Documentação
 
@@ -34,7 +34,7 @@ Onde {url} é onde o FastApi está rodando no seu sistema.
 
 # Contribuições
 
-Toda contribuição é bem-vinda para o projeto, basta enviar uma Pull Request de um fork feito na sua conta do Github
+Toda contribuição é bem-vinda para o projeto, basta enviar uma Pull Request de um fork feito na sua conta do Github, lembre de adicionar o membros do grupo no repositório, em caso de duvidas peça ajuda no grupo do Whatsapp.
 
 # Créditos
 
