@@ -24,6 +24,8 @@ caso queira rodar no terminal, execute o seguinte comando:
 
 Dentro da pasta Modules o grupo deve fazer uma copia da pasta Grupo1 e fazer as alterações necessárias para identificação do grupo, sendo primeironomemembro1_primeironomemembro2_primeironomemembro3. No arquivo membros.mb coloquem uma lista com os nomes completos dos membros.
 
+Lembre de adicionar dentro do arquivo de rotas, o prefixo do grupo, mesmo nome do modulo.
+
 # Documentação
 
 Para acessar a documentação do FastApi é preciso acessar a seguinte url no navegador:

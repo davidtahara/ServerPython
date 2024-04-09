@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 import scapy.all as scapy
 
-router = APIRouter(prefix="/trabalho1", tags=[""])
+router = APIRouter(prefix="/grupo1", tags=[""])
 
-@router.get("/analise2")
+@router.get("/trabalho1")
 def analise():
-    arquivo = './pcaps/pacotes.pcap'
+    arquivo = './pcaps/arquivoteste.pcap'
     pacotes = scapy.rdpcap(arquivo)
 
     #ips
