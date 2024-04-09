@@ -178,7 +178,7 @@ class PacketSource:
     packetData: Dict[uuid.UUID, dpkt.Packet]
     '''Dicionario com o conteudo de cada pacote'''
     allPackets: List[Packet]
-    '''Lista com todos os pacotes disponiveis'''
+    '''Lista com todos os pacotes disponiveis(IP e ARP)'''
 
     def readPackets(self, filePath: str) -> list:
         '''
@@ -186,9 +186,9 @@ class PacketSource:
         '''
         f = open(filePath, 'rb')
         pcap = None
-        if filePath.endswith('aaa.pcap'):
+        if filePath.endswith('.pcap'):
             pcap = dpkt.pcap.Reader(f)
-        elif filePath.endswith('1.pcapng'):
+        elif filePath.endswith('.pcapng'):
             pcap = dpkt.pcapng.Reader(f)
         else:
             print("Arquivo nao suportado: " + filePath)

@@ -9,23 +9,23 @@ src = PacketSource()
 
 @router.get("/enviados/list")
 def get_enviados_list():
-    output = {packet.sourceIp for packet in src.allPackets}
+    output = {packet.sourceIp for packet in src.allPackets if isinstance(packet, IPPacket)}
     return output
 
 @router.get("/enviados/{ip}")
 def get_enviados(ip: str):
-    output = [packet for packet in src.allPackets if packet.sourceIp == ip]
+    output = [packet for packet in src.allPackets if isinstance(packet, IPPacket) and packet.sourceIp == ip]
     return output
 
 
 @router.get('/recebidos/list')
 def get_recebidos_list():
-    output = {packet.destinationIp for packet in src.allPackets}
+    output = {packet.destinationIp for packet in src.allPackets if isinstance(packet, IPPacket)}
     return output
 
 @router.get("/recebidos/{ip}")
 def get_recebidos(ip: str):
-    output = [packet for packet in src.allPackets if packet.destinationIp == ip]
+    output = [packet for packet in src.allPackets if isinstance(packet, IPPacket) and packet.destinationIp == ip]
     return output
 
 @router.get("/relatorio/simples/{ip}")
