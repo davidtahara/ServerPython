@@ -95,13 +95,31 @@ const arp_header_template = `<div class=\"row py-2\" <div class=\"flexbox mg-3\"
     </div>
 
     <div class=\"tupla\">
-        
+        <div class=\"SENDER_HARDWARE_ADDRESS tooltip-container\">
+            {sourceMac}
+            <br>
+            ({sourceVendor})
+            <span class=\"tooltip-text\">Sender Hardware Address</span>
+        </div>
     </div>
     <div class=\"tupla\">
-
+        <div class=\"SENDER_PROTOCOL_ADDRESS tooltip-container\">{sourceIp}
+            <span class=\"tooltip-text\">Sender Protocol Address</span>
+        </div>
     </div>
     <div class=\"tupla\">
-    
+        <div class=\"TARGET_HARDWARE_ADDRESS tooltip-container\">
+            {targetMac}
+            <br>
+            ({targetVendor})
+            <span class=\"tooltip-text\">Target Hardware Address</span>
+        </div>
+    </div>
+    <div class=\"tupla\">
+        <div class=\"TARGET_PROTOCOL_ADDRESS tooltip-container\">
+            {targetIp}
+            <span class=\"tooltip-text\">Target Protocol Address</span>
+        </div>
     </div>
 </div>
 </div>

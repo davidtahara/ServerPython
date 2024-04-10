@@ -95,110 +95,11 @@ nav * {
 }
 
 .tupla {
+    margin: 5px;
     display: flex;
     height: 5vh;
     margin: auto;
     max-width: 640px
-}
-
-.VER {
-    background: #B3E5FC;
-    width: 80px;
-
-}
-
-.TR_CLASS {
-    background: #A1D4FA;
-    width: 240px;
-
-}
-
-.FLOW {
-    background: #8FC3F7;
-    width: 320px;
-}
-
-.PAY_LEN {
-    background: #6BA9F4;
-    width: 320px;
-}
-
-
-.N_HEADER {
-    background: #A1D4FA;
-    width: 160px;
-}
-
-
-.HOP {
-    background: #A1D4FA;
-    width: 160px;
-}
-
-
-.IHL {
-    background: #3577BD;
-    width: 80px;
-}
-
-.TOS {
-    background: #8FC3F7;
-    width: 160px;
-}
-
-.LEN {
-    width: 320px;
-    background: #7DB6F6;
-}
-
-.ID {
-    background: #6BA9F4;
-    width: 320px;
-}
-
-.EVIL {
-    background: #599BE5;
-    width: 20px;
-}
-
-.DF {
-    background: #4788D1;
-    width: 20px;
-}
-
-.MF {
-    background: #3577BD;
-    width: 20px;
-}
-
-.OFFSET {
-    background: #23579B;
-    width: 260px;
-}
-
-.TTL {
-    background: #113F73;
-    width: 160px;
-}
-
-.PROTOCOL {
-    background: #002549;
-    width: 160px;
-}
-
-.CHECKSUM {
-    background: #001F3F;
-    width: 320px;
-}
-
-.SOURCE {
-    background: #001B30;
-    width: 640px;
-}
-
-.DESTINATION {
-    background: #001726;
-    width: 640px;
 }
 
 
