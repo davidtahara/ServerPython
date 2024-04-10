@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <script src="src/echarts.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Packet sniffer</h1>
+      <div id="visits-per-destination" class="chart"></div>
+      <div id="generated-traffic-per-source" class="chart"></div>
+      <div id="visits-per-country" class="chart"></div>
+    </div>
+    <script type="module" src="dist/main.js"></script>
+    <script type="module" src="dist/charts/BarGraph.js"></script>
+    <script type="module" src="dist/api/Api.js"></script>
+  </body>
+</html>
