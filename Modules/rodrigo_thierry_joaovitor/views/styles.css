@@ -21,6 +21,7 @@ time, mark, audio, video {
     border: 0;
     font-size: 100%;
     font: inherit;
+    font-family: arial;
     vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
@@ -47,6 +48,29 @@ table {
     border-spacing: 0;
 }
 
+nav * {
+    color: ghostwhite!important;
+}
+
+    /* Adicione uma barra de rolagem apenas vertical */
+.navbar-nav {
+    overflow-y: auto;
+}
+#sidebar {
+    max-height: 100vh;
+    position: sticky!important;
+    top: 0;
+}
+
+#sidebar li{
+    padding: 16px 16px;
+}
+#sidebar li:hover {
+
+        background-color: #000000 !important; /* Altere a cor conforme necessário */
+    }
+
+
 
 .flexbox {
 
@@ -66,7 +90,7 @@ table {
 .tupla> div{
     border: 1px double #0B6623; /* If you want a dotted underline */
     text-align: center;
-    color: #0B6623;
+    color: #d06300;
     align-items: center;
 }
 

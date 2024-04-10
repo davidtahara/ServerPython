@@ -6,7 +6,7 @@ let data = null;
 async function getSenders() {
     const response = await fetch('http://127.0.0.1:3001/grupo_rodrigo_thierry_joao/ip/enviados/list');
     const data = await response.json();
-    const ul = document.createElement('ul');
+    const ul = document.getElementById('sidebar_ul');
 
     for (let i in data) {
         console.log(i)
@@ -14,6 +14,7 @@ async function getSenders() {
         const li = document.createElement('li');
 
         // Set the text of the list item to the current address
+        li.classList.add("nav-item")
         li.innerText = data[i];
         li.addEventListener('click', async function () {
             let conteiner = document.getElementById("headers");
