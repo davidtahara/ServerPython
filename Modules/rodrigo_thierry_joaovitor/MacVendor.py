@@ -1,4 +1,6 @@
 import json
+import urllib
+from urllib import request
 
 prefixes = {}
 
@@ -30,4 +32,21 @@ def findVendor(macAddress: str) -> str|None:
     if prefix in prefixes:
         return prefixes[prefix]
     else:
-        return None
+        # nao achei, vou consultar a api
+        url = f'https://api.macvendors.com/{prefix}'
+        print('Consultando a api...' + url)
+
+        try:
+            response = request.urlopen(url)
+            if response.getcode() == 200:
+                vendor = response.read().decode('utf-8')
+                prefixes[prefix] = vendor
+                print(f'Cache miss: {prefix} -> {vendor}. Adding to persistance.')
+                with open('Modules/rodrigo_thierry_joaovitor/macVendors.json', 'w', encoding="utf8") as f:
+                    json.dump(prefixes, f, indent=4)
+                return vendor
+            else:
+                print(f'Erro ao consultar a api. Status code: {response.status_code}')
+                return 'Unknown'
+        except:
+            return 'Unknown'

@@ -20,7 +20,7 @@ async function getSenders() {
         li.addEventListener('click', async function () {
             let conteiner = document.getElementById("headers");
             conteiner.innerHTML = '';
-            await fetch('http://127.0.0.1:3001/grupo_rodrigo_thierry_joao/arp/enviados/' + data[i][0])
+            await fetch('http://127.0.0.1:3001/grupo_rodrigo_thierry_joao/arp/recebidos/' + data[i][0])
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
