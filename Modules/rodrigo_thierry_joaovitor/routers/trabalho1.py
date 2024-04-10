@@ -1,11 +1,9 @@
 from fastapi import APIRouter
-from ...rodrigo_thierry_joaovitor.Parser import PacketSource, IPPacket, ARPPacket
+from ...rodrigo_thierry_joaovitor.Parser import PacketSource, IPPacket, ARPPacket, packetSource as src
 #from Parser import PacketSource, IPPacket, ARPPacket
 # import scapy.all as scapy
 
 router = APIRouter(prefix="/grupo_rodrigo_thierry_joao/ip", tags=[""])
-
-src = PacketSource()
 
 @router.get("/enviados/list")
 def get_enviados_list():

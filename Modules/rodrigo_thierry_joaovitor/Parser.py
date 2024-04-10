@@ -55,7 +55,7 @@ class ARPPacket(Packet):
 
     source_hardware_address: str
     source_protocol_address: str
-    destiation_hardware_address: str
+    destination_hardware_address: str
     destination_protocol_address: str
 
     #Não quebrar a API
@@ -238,3 +238,6 @@ class PacketSource:
     def __init__(self):
         self.packetData = {}
         self.allPackets = self.readAll()
+
+
+packetSource = PacketSource()

@@ -1,30 +1,44 @@
 from fastapi import APIRouter
-from ...rodrigo_thierry_joaovitor.Parser import PacketSource, IPPacket, ARPPacket
+from ...rodrigo_thierry_joaovitor.Parser import PacketSource, IPPacket, ARPPacket, packetSource as src
+from ...rodrigo_thierry_joaovitor.MacVendor import findVendor
 #from Parser import PacketSource, IPPacket, ARPPacket
 # import scapy.all as scapy
 
 router = APIRouter(prefix="/grupo_rodrigo_thierry_joao/arp", tags=[""])
 
-src = PacketSource()
-
 @router.get("/enviados/list")
 def get_enviados_list():
-    output = {packet.sourceIp for packet in src.allPackets if isinstance(packet, ARPPacket)}
+    ''' Retorna uma lista de tuplas dos endereços(logicos e fisicos) que fizeram ARP requests'''
+    for packet in src.allPackets:
+        if not isinstance(packet, ARPPacket):
+            continue
+        arpPacket:ARPPacket = packet
+        if arpPacket.operation == 1:
+            yield (arpPacket.sourceIp, arpPacket.source_hardware_address)
+
+@router.get("/getVendor/{ip}")
+def get_vendor(ip: str):
+    ''' Retorna o nome do fabricante do endereço MAC. Utiliza caching para prevenir rate limit'''
+    output = findVendor(ip)
     return output
 
-@router.get("/enviados/{ip}")
-def get_enviados(ip: str):
-    output = [packet for packet in src.allPackets if isinstance(packet, ARPPacket) and packet.sourceIp == ip]
-    return output
+@router.get("/todos")
+async def get_todos():
+    '''Retorna uma lista com todos os requests ARP'''
+    output = []
 
-@router.get("/")
+    for packet in src.allPackets:
+        if not isinstance(packet, ARPPacket):
+            continue
+        arpPacket:ARPPacket = packet
 
-@router.get('/recebidos/list')
-def get_recebidos_list():
-    output = {packet.destinationIp for packet in src.allPackets if isinstance(packet, ARPPacket)}
-    return output
-
-@router.get("/recebidos/{ip}")
-def get_recebidos(ip: str):
-    output = [packet for packet in src.allPackets if isinstance(packet, ARPPacket) and packet.destinationIp == ip]
+        output.append({
+            "sourceIp": arpPacket.source_protocol_address,
+            "sourceMac": arpPacket.source_hardware_address,
+            "targetIp": arpPacket.destination_protocol_address,
+            "targetMac": arpPacket.destination_protocol_address,
+            "operation": arpPacket.operation,
+            "sourceVendor": findVendor(arpPacket.source_hardware_address),
+            "targetVendor": findVendor(arpPacket.destination_hardware_address)
+        })
     return output
