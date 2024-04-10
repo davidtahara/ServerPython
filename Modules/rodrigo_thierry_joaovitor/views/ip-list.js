@@ -33,9 +33,7 @@ async function getSenders() {
         // Append the list item to the unordered list
         ul.appendChild(li);
     }
-
-
-document.getElementById("sidebar").appendChild(ul);
+    document.getElementById("sidebar").appendChild(ul);
 }
 
 getSenders();
