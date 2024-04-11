@@ -1,0 +1,136 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    font-family: arial;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+nav * {
+    color: ghostwhite!important;
+}
+
+    /* Adicione uma barra de rolagem apenas vertical */
+.navbar-nav {
+    overflow-y: auto;
+}
+#sidebar {
+    max-height: 100vh;
+    position: sticky!important;
+    top: 0;
+}
+
+#sidebar li{
+    padding: 16px 16px;
+}
+#sidebar li:hover {
+
+        background-color: #000000 !important; /* Altere a cor conforme necessário */
+    }
+
+
+
+.flexbox {
+
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    height: 10vh;
+    margin: auto;
+    margin-top:40px;
+    max-width: 640px
+}
+
+.tupla> div:hover {
+    transform: scale(1.1);
+    transition: transform 0.5s ease-in-out;
+}
+.tupla> div{
+    border: 1px double #0B6623; /* If you want a dotted underline */
+    text-align: center;
+    color: #d06300;
+    align-items: center;
+}
+
+.tupla {
+    margin: 5px;
+    display: flex;
+    height: 5vh;
+    margin: auto;
+    max-width: 640px
+}
+
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 130px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    /* Position the tooltip text - see CSS tutorial (z-index, box-shadow) */
+    position: absolute;
+    z-index: 1;
+    bottom: 100%; /* Place the tooltip text at the bottom of the tooltip container */
+    left: 50%;
+    margin-left: -60px; /* Use half of the width value to center the tooltip text */
+
+    /* Fade in tooltip text */
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+

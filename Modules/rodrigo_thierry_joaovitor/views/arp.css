@@ -1,0 +1,53 @@
+.HARDWARE_TYPE {
+    background: #caf0f8;
+    width: 320px;
+    padding: 5px;
+}
+
+.PROTOCOL_TYPE {
+    background: #ade8f4;
+    width: 320px;
+    padding: 5px;
+}
+
+.HARDWARE_LEN {
+    background: #90e0ef;
+    padding: 5px;
+    width: 160px;
+}
+
+.PROTOCOL_LEN {
+    background: #90e0ef;
+    padding: 5px;
+    width: 160px;
+}
+
+.OPERATION {
+    background: #48cae4;
+    padding: 5px;
+    width: 320px;
+}
+
+.SENDER_HARDWARE_ADDRESS {
+    background: #00b4d8;
+    padding: 5px;
+    width: 640px;
+}
+
+.SENDER_PROTOCOL_ADDRESS {
+    background: #0096c7;
+    padding: 5px;
+    width: 640px;
+}
+
+.TARGET_HARDWARE_ADDRESS {
+    background: #0077b6;
+    padding: 5px;
+    width: 640px;
+}
+
+.TARGET_PROTOCOL_ADDRESS {
+    background: #023e8a;
+    padding: 5px;
+    width: 640px;
+}
