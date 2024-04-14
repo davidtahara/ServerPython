@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import dpkt
 import uuid
 import os
@@ -14,12 +14,15 @@ ETH_TYPE_RARP = 0x8035
 
 
 class Packet:
-    uniqueId: uuid.UUID
+    uniqueId: uuid.UUID = None
 
     '''
     Quem sabe seja útil quando for lidar com TCP e UDP
     '''
     payload: uuid.UUID
+
+    def __init__(self):
+        self.uniqueId = uuid.uuid4()
 
     def convert(pkg) -> 'Packet':
         '''
@@ -36,14 +39,21 @@ class Packet:
             print("Tipo de pacote desconhecido! Tipo:" + str(type(pkg)))
 
 
+def appendPackets(destination: Dict[type, List[Packet]], source: Dict[type, List[Packet]]):
+    for key in source:
+        if destination.get(key) is None:
+            destination[key] = []
+        destination[key].extend(source[key])
+
+
 class ARPPacket(Packet):
     """ARPPacket.
 
     Args:
         hardware_type (int): 16 bits. The type of the network on which ARP is running. Ethernet is given type 1.
         protocol_type (int): 16 bits. Defining the protocol. The value of this field for the IPv4 protocol is 0800H.
-        hardware_lenght (int): 8 bits. Length of the hardware address in bytes.
-        protocol_lenght (int): 8 bits. Length of the logical address in bytes.
+        hardware_length (int): 8 bits. Length of the hardware address in bytes.
+        protocol_length (int): 8 bits. Length of the logical address in bytes.
         operation: (str): 16 bits. REQUEST OR REPLY
 
     """
@@ -58,9 +68,10 @@ class ARPPacket(Packet):
     destination_hardware_address: str
     destination_protocol_address: str
 
-    #Não quebrar a API
+    # Não quebrar a API
     sourceIp: str
     destinationIp: str
+
     def convert(pkg: dpkt.arp.ARP) -> 'ARPPacket':
 
         def format_protocol_address(value: bytes, proto_type) -> str:
@@ -76,7 +87,6 @@ class ARPPacket(Packet):
                 return ':'.join('{:02x}'.format(byte) for byte in value)
             else:
                 return 'Unknown Protocol Type'
-
 
         arpPkg = ARPPacket()
         arpPkg.hardware_type = pkg.hrd
@@ -180,6 +190,10 @@ class PacketSource:
     allPackets: List[Packet]
     '''Lista com todos os pacotes disponiveis(IP e ARP)'''
 
+    '''Alternativa para evitar iterar sobre todos os pacotes em consultas e 
+    para lidar melhtos com pacotes aninhados. ex.: IP(UDP(RIP))'''
+    allPacketsDict: Dict[type, List[Packet]]
+
     def readPackets(self, filePath: str) -> list:
         '''
         Le um arquivo pcap e retorna uma lista de pacotes IP
@@ -213,31 +227,47 @@ class PacketSource:
         f.close()
         return packets
 
-    def readAll(self) -> List[Packet]:
+    def readAll(self) -> Tuple[List[Packet], Dict[type, List[Packet]]]:
         '''
         Le todos os pcap da pasta captures e retorna uma lista de pacotes IP
         '''
 
         arquivos = os.listdir('./pcaps')
         output = []
+        outputDict: Dict[type, List[Packet]] = {}
         for arquivo in arquivos:
             print("Lendo arquivo: ", arquivo)
             packets = self.readPackets(f'./pcaps/{arquivo}')
             for packet in packets:
-                pkt: Packet = Packet.convert(packet)
+                pkt: Packet | Dict[type, List[Packet]] = Packet.convert(packet)
                 if pkt is None:
+                    raise
                     # print("um pacote nao foi convertido")
                     continue
-                pkt.uniqueId = uuid.uuid4()
-                self.packetData[pkt.uniqueId] = packet.data
-                output.append(pkt)
+
+                if type(pkt) != dict:
+                    # Esta condição não deve ocorrer,
+                    # uniqueUuid está sendo definido na inicialização do objeto
+                    if pkt.uniqueId is None:
+                        pkt.uniqueId = uuid.uuid4()
+                    self.packetData[pkt.uniqueId] = packet.data
+                    output.append(pkt)
+
+                    if outputDict.get(pkt.__class__) is None:
+                        outputDict[pkt.__class__] = []
+                    outputDict[pkt.__class__].append(pkt)
+                elif type(pkt) == dict:
+                    appendPackets(outputDict, pkt)
+                    for pkt_unit in pkt:
+                        self.packetData[pkt_unit.uniqueId] = packet.data
+                        output.append(pkt_unit)
 
         print("li um total de", len(output), "pacotes")
-        return output
+        return output, outputDict
 
     def __init__(self):
         self.packetData = {}
-        self.allPackets = self.readAll()
+        self.allPackets, self.allPacketsDict = self.readAll()
 
 
 packetSource = PacketSource()
