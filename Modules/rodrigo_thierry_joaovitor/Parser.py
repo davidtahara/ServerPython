@@ -1,4 +1,5 @@
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Any
+from pydantic import BaseModel
 import dpkt
 import uuid
 import os
@@ -13,6 +14,15 @@ ETH_TYPE_ARP = 0x0806
 ETH_TYPE_RARP = 0x8035
 
 
+def int_to_ip4(addr: int) -> str:
+    octets = []
+    for _ in range(4):
+        octet = addr & 255
+        octets.insert(0, str(octet))
+        addr >>= 8
+    return '.'.join(octets)
+
+
 class Packet:
     uniqueId: uuid.UUID = None
 
@@ -24,7 +34,7 @@ class Packet:
     def __init__(self):
         self.uniqueId = uuid.uuid4()
 
-    def convert(pkg) -> 'Packet':
+    def convert(pkg) -> 'Packet' | List['Packet'] | None:
         '''
         Converte o esquema de pacote do dpkt para IPPacket
         '''
@@ -34,16 +44,18 @@ class Packet:
             return IP6Packet.convert(pkg)
         elif isinstance(pkg, dpkt.arp.ARP):
             return ARPPacket.convert(pkg)
-
+        elif isinstance(pkg, dpkt.udp.UDP):
+            return UDPPacket.convert(pkg)
         else:
-            print("Tipo de pacote desconhecido! Tipo:" + str(type(pkg)))
+            print("Tipo de pacote não tratado! Tipo:" + str(type(pkg)))
+            return None
 
 
-def appendPackets(destination: Dict[type, List[Packet]], source: Dict[type, List[Packet]]):
-    for key in source:
-        if destination.get(key) is None:
-            destination[key] = []
-        destination[key].extend(source[key])
+def appendPackets(destination: Dict[type, List[Packet]], source: List[Packet]):
+    for pkt in source:
+        if destination.get(pkt.__class__) is None:
+            destination[pkt.__class__] = []
+        destination[pkt.__class__].append(pkt)
 
 
 class ARPPacket(Packet):
@@ -126,7 +138,7 @@ class IPPacket(Packet):
     headerChecksum: int
     service: int
 
-    def convert(ip: dpkt.ip.IP) -> 'IPPacket':
+    def convert(ip: dpkt.ip.IP) -> list['IPPacket', Any]:
         packet = IPPacket()
         packet.version = 4
         packet.version = ip.v
@@ -151,7 +163,20 @@ class IPPacket(Packet):
             packet.protocol = 'ICMP'
         else:
             packet.protocol = 'UNKN (' + str(ip.p) + ')'
-        return packet
+
+        data = Packet.convert(ip.data)
+
+        if data is not None:
+            if type(data) == list:
+                packet.payload = data[0].uniqueId
+                return [packet, *data]
+            else:
+                packet.payload = data.uniqueId
+                return [packet, data]
+
+
+        else:
+            return [packet]
 
 
 class IP6Packet(Packet):
@@ -164,7 +189,7 @@ class IP6Packet(Packet):
     flow: int
     fc: int  # flow control? nao sei oq é
 
-    def convert(ip: dpkt.ip6.IP6) -> 'IP6Packet':
+    def convert(ip: dpkt.ip6.IP6) -> 'IP6Packet' | List[Packet]:
         packet = IP6Packet()
         packet.version = 6
 
@@ -175,6 +200,86 @@ class IP6Packet(Packet):
         packet.hopLimit = ip.hlim
         packet.flow = ip.flow
         packet.fc = ip.fc
+
+        data = None
+        data = Packet.convert(ip.data)
+
+        if data is not None:
+            if type(data) == list:
+                packet.payload = data[0].uniqueId
+                return [packet, *data]
+            else:
+                packet.payload = data.uniqueId
+                return [packet, data]
+
+        return packet
+
+
+class RIPPacketModel(BaseModel):
+    command: int
+    metrics: List[Dict[str, Any]] = [{}]
+
+
+class RIPPacket(Packet):
+    """
+    Classe para encapsular dpkt.rip.RIP e printar
+    certinho na fastAPI
+    """
+    command: int
+    metrics: List[Dict[str, Any]] = list()
+
+    def convert(rip: dpkt.rip.RIP) -> 'RIPPacket':
+        pkt = RIPPacket()
+
+        rip = dpkt.rip.RIP(rip)
+
+        pkt.command = rip.cmd
+
+        for item in rip.rtes:
+            pkt.metrics.append(
+                {"address": int_to_ip4(item.addr),
+                 "mask": int_to_ip4(item.subnet),
+                 "metric": item.metric,
+                 "nextHop": item.next_hop}
+            )
+
+        return pkt
+
+
+class UDPPacket(Packet):
+    '''
+    Classe para encapsular dpkt.udp.UDP e printar
+    certinho na fastAPI
+    '''
+    srcPort: int
+    dstPort: int
+    length: int
+    checksum: int
+
+    def convert(pkt: dpkt.udp.UDP) -> 'UDPPacket' | List[Packet]:
+        packet = UDPPacket()
+
+        packet.dstPort = pkt.dport
+        packet.srcPort = pkt.sport
+        packet.length = pkt.ulen
+        packet.checksum = pkt.sum
+
+        # Não funcionando, UDP pode identificar o protocolo superior por Porta
+        # data = Packet.convert(pkt.data)
+        # Seria legal se existisse switch em python
+
+        data = None
+        if packet.dstPort == 520:
+            data = RIPPacket.convert(pkt.data)
+
+        if data is not None:
+            if type(data) == list:
+                packet.payload = data[0].uniqueId
+                return [packet, *data]
+            else:
+                packet.payload = data.uniqueId
+                return [packet, data]
+
         return packet
 
 
@@ -239,13 +344,12 @@ class PacketSource:
             print("Lendo arquivo: ", arquivo)
             packets = self.readPackets(f'./pcaps/{arquivo}')
             for packet in packets:
-                pkt: Packet | Dict[type, List[Packet]] = Packet.convert(packet)
+                pkt: Packet | List[Packet] = Packet.convert(packet)
                 if pkt is None:
-                    raise
                     # print("um pacote nao foi convertido")
                     continue
 
-                if type(pkt) != dict:
+                if type(pkt) != list:
                     # Esta condição não deve ocorrer,
                     # uniqueUuid está sendo definido na inicialização do objeto
                     if pkt.uniqueId is None:
@@ -256,7 +360,7 @@ class PacketSource:
                     if outputDict.get(pkt.__class__) is None:
                         outputDict[pkt.__class__] = []
                     outputDict[pkt.__class__].append(pkt)
-                elif type(pkt) == dict:
+                elif type(pkt) == list:
                     appendPackets(outputDict, pkt)
                     for pkt_unit in pkt:
                         self.packetData[pkt_unit.uniqueId] = packet.data
