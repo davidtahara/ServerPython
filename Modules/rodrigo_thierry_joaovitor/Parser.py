@@ -1,5 +1,4 @@
 from typing import List, Dict, Tuple, Any
-from pydantic import BaseModel
 import dpkt
 import uuid
 import os
@@ -30,6 +29,15 @@ class Packet:
     Quem sabe seja útil quando for lidar com TCP e UDP
     '''
     payload: uuid.UUID
+
+    external_pdu: 'Packet' = None
+    internal_pdu: 'Packet' = None
+
+    def setExternalPDU(self, pkt: 'Packet') -> None:
+        self.external_pdu = pkt
+
+    def setInternalPDU(self, pkt: 'Packet') -> None:
+        self.internal_pdu = pkt
 
     def __init__(self):
         self.uniqueId = uuid.uuid4()
@@ -169,9 +177,13 @@ class IPPacket(Packet):
         if data is not None:
             if type(data) == list:
                 packet.payload = data[0].uniqueId
+                packet.setInternalPDU(data[0])
+                data[0].setExternalPDU(packet)
                 return [packet, *data]
             else:
                 packet.payload = data.uniqueId
+                packet.setInternalPDU(data)
+                data.setExternalPDU(packet)
                 return [packet, data]
 
 
@@ -207,24 +219,19 @@ class IP6Packet(Packet):
         if data is not None:
             if type(data) == list:
                 packet.payload = data[0].uniqueId
+                packet.setInternalPDU(data[0])
+                data[0].setExternalPDU(packet)
                 return [packet, *data]
             else:
                 packet.payload = data.uniqueId
+                packet.setInternalPDU(data)
+                data.setExternalPDU(packet)
                 return [packet, data]
 
         return packet
 
 
-class RIPPacketModel(BaseModel):
-    command: int
-    metrics: List[Dict[str, Any]] = [{}]
-
-
 class RIPPacket(Packet):
-    """
-    Classe para encapsular dpkt.rip.RIP e printar
-    certinho na fastAPI
-    """
     command: int
     metrics: List[Dict[str, Any]] = list()
 
@@ -251,6 +258,8 @@ class UDPPacket(Packet):
     Classe para encapsular dpkt.udp.UDP e printar
     certinho na fastAPI
     '''
+
+    srcIp: str
     srcPort: int
     dstPort: int
     length: int
@@ -268,16 +277,20 @@ class UDPPacket(Packet):
         # data = Packet.convert(pkt.data)
         # Seria legal se existisse switch em python
 
-        data = None
+        data: Packet | List[Packet] | None = None
         if packet.dstPort == 520:
             data = RIPPacket.convert(pkt.data)
 
         if data is not None:
             if type(data) == list:
                 packet.payload = data[0].uniqueId
+                packet.setInternalPDU(data[0])
+                data[0].setExternalPDU(packet)
                 return [packet, *data]
             else:
                 packet.payload = data.uniqueId
+                packet.setInternalPDU(data)
+                data.setExternalPDU(packet)
                 return [packet, data]
 
         return packet
