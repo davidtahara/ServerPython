@@ -4,7 +4,6 @@ from typing import List, Dict, Any
 
 router = APIRouter(prefix="/grupo_rodrigo_thierry_joao/rip", tags=[""])
 
-
 @router.get("/todos")
 def rip_todos():
     tmp: List[Dict[str, (int | List[Dict[str, Any]])]] = []  # Que definição de tipo feio
