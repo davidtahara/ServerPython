@@ -233,7 +233,11 @@ class IP6Packet(Packet):
 
 class RIPPacket(Packet):
     command: int
-    metrics: List[Dict[str, Any]] = list()
+    metrics: List[Dict[str, Any]] | None= []
+
+
+    def __init__(self):
+        self.metrics = []
 
     def convert(rip: dpkt.rip.RIP) -> 'RIPPacket':
         pkt = RIPPacket()
@@ -243,6 +247,7 @@ class RIPPacket(Packet):
         pkt.command = rip.cmd
 
         for item in rip.rtes:
+
             pkt.metrics.append(
                 {"address": int_to_ip4(item.addr),
                  "mask": int_to_ip4(item.subnet),
