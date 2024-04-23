@@ -265,6 +265,7 @@ class UDPPacket(Packet):
     '''
 
     srcIp: str
+    dstIp: str
     srcPort: int
     dstPort: int
     length: int
@@ -285,7 +286,6 @@ class UDPPacket(Packet):
         data: Packet | List[Packet] | None = None
         if packet.dstPort == 520:
             data = RIPPacket.convert(pkt.data)
-
         if data is not None:
             if type(data) == list:
                 packet.payload = data[0].uniqueId
