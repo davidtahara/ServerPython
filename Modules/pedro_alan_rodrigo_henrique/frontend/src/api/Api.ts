@@ -9,4 +9,14 @@ export default class Api {
     const data = await response.json();
     return data;
   }
+
+  async post(path: string, data?: any) {
+    await fetch(`${this.baseUrl}${path}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+  }
 }
