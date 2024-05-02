@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PCAP Analyzer</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <input type="file" id="pcapFile" accept=".pcap">
+    <button onclick="uploadFile()">Analyze PCAP</button>
+    <div id="results"></div>
+
+    <script>
+        function uploadFile() {
+            var fileInput = document.getElementById('pcapFile');
+            var file = fileInput.files[0];
+            if (file) {
+                var formData = new FormData();
+                formData.append('files', file);
+
+                axios.post('http://localhost:8000/analyze-pcap/', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+                .then(function (response) {
+                    displayResults(response.data);
+                })
+                .catch(function (error) {
+                    console.error('Error analyzing PCAP:', error);
+                });
+            } else {
+                alert('Please select a file.');
+            }
+        }
+
+        function displayResults(data) {
+            var resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+
+            for (var macAddress in data) {
+                var vendor = data[macAddress];
+                var resultElement = document.createElement('div');
+                resultElement.innerText = macAddress + ': ' + vendor;
+                resultsDiv.appendChild(resultElement);
+            }
+        }
+    </script>
+</body>
+</html>

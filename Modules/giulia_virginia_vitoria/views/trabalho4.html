@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UDP Analysis</title>
+</head>
+<body>
+    <h1>UDP Analysis Results</h1>
+    <button onclick="fetchUdpAnalysis()">Analyze UDP Traffic</button>
+    <div id="results"></div>
+
+    <script>
+        async function fetchUdpAnalysis() {
+            try {
+                const response = await fetch('/udp-analysis');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        function displayResults(data) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+
+            const protocols = data.Protocolos;
+            const ips = data.IPs;
+            const ports = data.Portas;
+            const totalTime = data['Tempo total'];
+
+            resultsDiv.innerHTML += '<h2>Protocolos</h2>';
+            for (const protocol in protocols) {
+                resultsDiv.innerHTML += `<p>${protocol}: ${protocols[protocol]}</p>`;
+            }
+
+            resultsDiv.innerHTML += '<h2>IPs</h2>';
+            for (const ip in ips) {
+                resultsDiv.innerHTML += `<p>${ip}: ${ips[ip]}</p>`;
+            }
+
+            resultsDiv.innerHTML += '<h2>Portas</h2>';
+            for (const port in ports) {
+                resultsDiv.innerHTML += `<p>${port}: ${ports[port]}</p>`;
+            }
+
+            resultsDiv.innerHTML += `<h2>Tempo total: ${totalTime}</h2>`;
+        }
+    </script>
+</body>
+</html>
