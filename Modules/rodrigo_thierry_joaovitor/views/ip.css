@@ -1,0 +1,98 @@
+.VER {
+    background: #CAF0F8;
+    width: 80px;
+}
+
+.TR_CLASS {
+    background: #ADE8F4;
+    width: 240px;
+
+}
+
+.FLOW {
+    background: #9FE4F2;
+    width: 320px;
+}
+
+.PAY_LEN {
+    background: #90E0EF;
+    width: 320px;
+}
+
+
+.N_HEADER {
+    background: #6CD5EA;
+    width: 160px;
+}
+
+
+.HOP {
+    background: #48CAE4;
+    width: 160px;
+}
+
+
+.IHL {
+    background: #24BFDE;
+    width: 80px;
+}
+
+.TOS {
+    background: #00B4D8;
+    width: 160px;
+}
+
+.LEN {
+    width: 320px;
+    background: #00A5D0;
+}
+
+.ID {
+    background: #0096C7;
+    width: 320px;
+}
+
+.EVIL {
+    background: #0087BF;
+    width: 20px;
+}
+
+.DF {
+    background: #0077B6;
+    width: 20px;
+}
+
+.MF {
+    background: #015BA0;
+    width: 20px;
+}
+
+.OFFSET {
+    background: #023E8A;
+    width: 260px;
+}
+
+.TTL {
+    background: #032174;
+    width: 160px;
+}
+
+.PROTOCOL {
+    background: #03045E;
+    width: 160px;
+}
+
+.CHECKSUM {
+    background: #001F3F;
+    width: 320px;
+}
+
+.SOURCE {
+    background: #001B30;
+    width: 640px;
+}
+
+.DESTINATION {
+    background: #001726;
+    width: 640px;
+}

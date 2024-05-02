@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico de IPs e Dados</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div style=" margin: auto;">
+        <canvas id="myChart" width="900" height="300"></canvas>
+    </div>
+
+    <script>
+        fetch('dados.json')
+            .then(response => response.json())
+            .then(data => {
+                const ips = Object.keys(data);
+                const bytes = Object.values(data);
+                const colors = [];
+
+                // Define as cores com base na propriedade 'public'
+                for (const ip in data) {
+                    if (data[ip].public) {
+                        colors.push('rgba(75, 192, 192, 0.6)');
+                    } else {
+                        colors.push('rgba(54, 162, 235, 0.6)');
+                    }
+                }
+
+                const ctx = document.getElementById('myChart').getContext('2d');
+                const myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ips,
+                        datasets: [{
+                            label: 'Quantidade de Bytes',
+                            data: bytes.map(obj => obj.bytes),
+                            backgroundColor: colors,
+                            borderColor: colors.map(color => color.replace(/,\s*0.6\)/, ', 1)')),
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                type: 'category',
+                                title: {
+                                    display: true,
+                                    text: 'IPs'
+                                }
+                            },
+                            y: {
+                                type: 'logarithmic', // Define o eixo y como logarítmico
+                                title: {
+                                    display: true,
+                                    text: 'Quantidade de Bytes (log)'
+                                },
+                                ticks: {
+                                    callback: function (value, index, values) {
+                                        return Number(value.toString());// passa os ticks para um valor log
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true
+                            }
+                        }
+                    }
+                });
+            });
+    </script>
+</body>
+</html>
