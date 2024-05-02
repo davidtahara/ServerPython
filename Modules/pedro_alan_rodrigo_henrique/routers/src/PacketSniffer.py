@@ -1,11 +1,10 @@
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from scapy.all import sniff
 from scapy.layers.inet import IP
 import threading
-from IpToCountry import IpToCountry
-from isPrivateIp import isPrivateIp
+from Modules.pedro_alan_rodrigo_henrique.routers.src.IpToCountry import IpToCountry
+from Modules.pedro_alan_rodrigo_henrique.routers.src.isPrivateIp import isPrivateIp
 
 
 class PacketSniffer:
@@ -17,7 +16,9 @@ class PacketSniffer:
         self.__stop_sniffing = threading.Event()
         self.__sniffer_thread = threading.Thread(target=self.__start_sniffing)
         print("Loading ip to country csv...")
-        self.__ip_to_country = IpToCountry(f"{os.path.dirname(os.path.abspath(__file__))}/ip_to_country.csv")
+        self.__ip_to_country = IpToCountry(
+            f"{os.path.dirname(os.path.abspath(__file__))}/ip_to_country.csv"
+        )
 
     def __start_sniffing(self):
         filter_expression = "ip and tcp"

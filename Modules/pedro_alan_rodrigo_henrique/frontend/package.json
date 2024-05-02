@@ -13,5 +13,8 @@
   "devDependencies": {
     "@types/echarts": "^4.9.22",
     "live-server": "^1.2.2"
+  },
+  "dependencies": {
+    "typescript": "^5.4.5"
   }
 }

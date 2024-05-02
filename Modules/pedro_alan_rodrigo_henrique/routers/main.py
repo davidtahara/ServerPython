@@ -1,19 +1,10 @@
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from src.PacketSniffer import PacketSniffer
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from Modules.pedro_alan_rodrigo_henrique.routers.src.PacketSniffer import PacketSniffer
+from fastapi import APIRouter
 
 
-router = FastAPI(prefix="/grupo_pedro_alan_rodrigo_henrique/ip", tags=[""])
-router.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+router = APIRouter(prefix="/grupo_pedro_alan_rodrigo_henrique/ip", tags=[""])
 
 packet_sniffer = PacketSniffer()
 packet_sniffer.start()
