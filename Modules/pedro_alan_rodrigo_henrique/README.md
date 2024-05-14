@@ -26,7 +26,7 @@ Depois disso é possível rodar a aplicação executando os seguintes comandos a
 
 OBS: sudo é necessário já que as funções do scapy precisar ser executados como admnistrador, talvez no windows isso signifique executar um terminal como admnistrador
 
-OBS2: Para executar o projeto no windows precisei installar o winpcap
+OBS2: Para executar o projeto no windows precisei instalar o npcap e no instalador marcar opção que fala algo como "habilitar monitoramento para redes wifi 802.11"
 
 ## Frontend
 
