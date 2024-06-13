@@ -4,3 +4,4 @@ uvicorn==0.28.0
 python-dotenv==1.0.1
 scapy==2.5.0
 dpkt==1.9.8
+ping3==ping3 4.0.8
