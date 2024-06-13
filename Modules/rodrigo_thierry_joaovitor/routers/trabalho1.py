@@ -33,7 +33,7 @@ def get_soma(ip: str):
     output['trafego'] = {}
     output['protocolo'] = {}
     for packet in src.allPackets:
-        if isinstance(packet, ARPPacket) or (packet.sourceIp != ip and packet.destinationIp != ip):
+        if not isinstance(packet, IPPacket) or (packet.sourceIp != ip and packet.destinationIp != ip):
             continue
 
         size = 0

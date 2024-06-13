@@ -104,7 +104,7 @@ console.log(IPv4ToBinary('192.168.100.100'));
 
 /// -------------------------------------------------------------------
 
-const ip_header_template = `<div class=\"row py-2\" <div class=\"flexbox mg-3\" id=\"{0}\"> 
+const ip_header_template = `<div class=\"row py-2\"> <div class=\"flexbox mg-3\" id=\"{0}\"> 
     <div class=\"tupla\">
         <div class=\"VER tooltip-container\">{version}
             <span class=\"tooltip-text\">Versão</span>

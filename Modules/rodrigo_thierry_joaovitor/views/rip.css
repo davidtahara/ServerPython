@@ -1,0 +1,26 @@
+.ROTA {
+    background: #227c9d;
+    width: 320px;
+    padding: 5px;
+}
+.MASK {
+    background: #17c3b2;
+    width: 320px;
+    padding: 5px;
+}
+.DISTANCE {
+    background: #ffcb77;
+    width: 160px;
+    padding: 5px;
+}
+.NEXTHOP {
+    background: #fe6d73;
+    width: 160px;
+    padding: 5px;
+}
+.tupla> div{
+    border: 1px double #0B6623; /* If you want a dotted underline */
+    text-align: center;
+    color: white;
+    align-items: center;
+}
