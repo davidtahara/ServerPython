@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topografia de Rede</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            margin: 0;
+            padding: 20px;
+        }
+        svg {
+            border: 1px solid #ccc;
+            background-color: #fff;
+            margin-top: 20px;
+        }
+        .machine {
+            fill: #4CAF50;
+            stroke: #333;
+            stroke-width: 2;
+        }
+        .ip-text {
+            fill: #000;
+            font-size: 14px;
+            text-anchor: middle;
+        }
+        .broadcast-line {
+            stroke: #2196F3;
+            stroke-width: 2;
+        }
+        .interconnect-line {
+            stroke: #FF5722;
+            stroke-width: 2;
+        }
+        .broadcast-circle {
+            fill: #2196F3;
+        }
+        .broadcast-text {
+            fill: #000;
+            font-size: 12px;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+        .svg-title {
+            fill: #000;
+            font-size: 18px;
+            text-anchor: middle;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Topografia de rede</h1>
+    <svg id="network-svg" width="800" height="600">
+        <text x="400" y="50" class="svg-title">rede</text>
+    </svg>
+    <script>
+        fetch('topology.json')
+            .then(response => response.json())
+            .then(jsonData => {
+                const svg = document.getElementById('network-svg');
+                const machineWidth = 120;
+                const machineHeight = 120;
+                const verticalGap = 160;
+                const horizontalGap = 400;
+                const padding = 140;
+
+                const ips = Object.keys(jsonData).filter(ip => ip !== "224.0.0.9");
+                const numMachines = ips.length;
+
+                const machines = {};
+                ips.forEach((ip, index) => {
+                    const x = padding + (index % 2) * horizontalGap;
+                    const y = padding + 100 + Math.floor(index / 2) * (machineHeight + verticalGap);
+                    machines[ip] = { x, y };
+                });
+
+                Object.keys(machines).forEach(ip => {
+                    const machine = machines[ip];
+                    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    rect.setAttribute("x", machine.x);
+                    rect.setAttribute("y", machine.y);
+                    rect.setAttribute("width", machineWidth);
+                    rect.setAttribute("height", machineHeight);
+                    rect.setAttribute("class", "machine");
+                    svg.appendChild(rect);
+
+                    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    text.setAttribute("x", machine.x + machineWidth / 2);
+                    text.setAttribute("y", machine.y - 15);
+                    text.setAttribute("class", "ip-text");
+                    text.textContent = ip;
+                    svg.appendChild(text);
+                });
+
+                Object.keys(jsonData).forEach(ip => {
+                    if (ip !== "224.0.0.9") {
+                        jsonData[ip].forEach((target, broadcastIndex) => {
+                            const machine = machines[ip];
+                            let line, circle;
+
+                            const targetX = machine.x + (ip.endsWith(".1") ? -50 : 170);
+                            const targetY = machine.y + (broadcastIndex + 1) * 20 + 10;
+
+                            line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                            line.setAttribute("x1", machine.x + (ip.endsWith(".1") ? 0 : machineWidth));
+                            line.setAttribute("y1", machine.y + machineHeight / 2);
+                            line.setAttribute("x2", targetX);
+                            line.setAttribute("y2", targetY);
+                            line.setAttribute("class", "broadcast-line");
+                            svg.appendChild(line);
+
+                            circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                            circle.setAttribute("cx", targetX);
+                            circle.setAttribute("cy", targetY);
+                            circle.setAttribute("r", 5);
+                            circle.setAttribute("class", "broadcast-circle");
+                            svg.appendChild(circle);
+
+                            const textMulticast = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                            textMulticast.setAttribute("x", targetX);
+                            textMulticast.setAttribute("y", targetY - 15);
+                            textMulticast.setAttribute("class", "broadcast-text");
+                            textMulticast.textContent = target; // Multicast IP
+                            svg.appendChild(textMulticast);
+
+                            if (numMachines > 1 && ip.endsWith(".1")) {
+                                const targetMachine = machines[ips[1]];
+                                const interconnectLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                                interconnectLine.setAttribute("x1", machine.x + machineWidth);
+                                interconnectLine.setAttribute("y1", machine.y + machineHeight / 2);
+                                interconnectLine.setAttribute("x2", targetMachine.x);
+                                interconnectLine.setAttribute("y2", targetMachine.y + machineHeight / 2);
+                                interconnectLine.setAttribute("class", "interconnect-line");
+                                svg.appendChild(interconnectLine);
+                            }
+                        });
+                    }
+                });
+            })
+            .catch(error => console.error('Error loading JSON:', error));
+    </script>
+</body>
+</html>
