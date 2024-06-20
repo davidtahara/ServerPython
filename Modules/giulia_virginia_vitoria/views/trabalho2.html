@@ -1,49 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PCAP Analyzer</title>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>ARP Data</title>
 </head>
 <body>
-    <input type="file" id="pcapFile" accept=".pcap">
-    <button onclick="uploadFile()">Analyze PCAP</button>
-    <div id="results"></div>
-
+    <h1>Dados de tráfego Protocolo ARP</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Source IP</th>
+                <th>Destination IP</th>
+                <th>Source MAC</th>
+                <th>Destination MAC</th>
+                <th>Operation</th>
+            </tr>
+        </thead>
+        <tbody id="arp-table-body">
+        </tbody>
+    </table>
     <script>
-        function uploadFile() {
-            var fileInput = document.getElementById('pcapFile');
-            var file = fileInput.files[0];
-            if (file) {
-                var formData = new FormData();
-                formData.append('files', file);
-
-                axios.post('http://localhost:8000/analyze-pcap/', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                })
-                .then(function (response) {
-                    displayResults(response.data);
-                })
-                .catch(function (error) {
-                    console.error('Error analyzing PCAP:', error);
+        async function fetchARPData() {
+            try {
+                const response = await fetch('http://localhost:3001/trabalho2');  // Endpoint correto
+                const data = await response.json();
+                console.log(data);
+                const tableBody = document.getElementById('arp-table-body');
+                
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    
+                    Object.values(item).forEach(value => {
+                        const cell = document.createElement('td');
+                        cell.textContent = value.toString();  // Convertendo para string, se necessário
+                        row.appendChild(cell);
+                    });
+                    
+                    tableBody.appendChild(row);
                 });
-            } else {
-                alert('Please select a file.');
+            } catch (error) {
+                console.error('Erro ao buscar dados ARP:', error);
             }
         }
-
-        function displayResults(data) {
-            var resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '';
-
-            for (var macAddress in data) {
-                var vendor = data[macAddress];
-                var resultElement = document.createElement('div');
-                resultElement.innerText = macAddress + ': ' + vendor;
-                resultsDiv.appendChild(resultElement);
-            }
-        }
-    </script>
+        fetchARPData();
+    </script>   
 </body>
 </html>

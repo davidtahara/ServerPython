@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 # Pega as variaveis de ambiente
-from dotenv import load_dotenv
+from dotenv import load_dotenv 
 load_dotenv()
 
 # Váriaveis de ambiente

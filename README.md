@@ -31,6 +31,7 @@ Lembre de adicionar dentro do arquivo de rotas, o prefixo do grupo, mesmo nome d
 Para acessar a documentação do FastApi é preciso acessar a seguinte url no navegador:
 
 `{url}/docs`
+`exemplo: http://localhost:3001/docs#/`
 
 Onde {url} é onde o FastApi está rodando no seu sistema.
 

@@ -1,44 +1,48 @@
 from fastapi import FastAPI, File, UploadFile
 from typing import List
 from scapy.all import ARP, rdpcap
-import requests
+from fastapi import APIRouter
+import uvicorn
+
+router = APIRouter()
 
 app = FastAPI()
 
-def get_mac_address_vendor(mac_address):
-    url = f"https://api.macvendors.com/{mac_address}"
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.text.strip()
-    else:
-        return "Unknown"
+class ARPData:
+    def __init__(self, timestamp, src_ip, dst_ip, src_mac, dst_mac, op):
+        self.timestamp = timestamp
+        self.src_ip = src_ip
+        self.dst_ip = dst_ip
+        self.src_mac = src_mac
+        self.dst_mac = dst_mac
+        self.op = op
 
-def analyze_arp_packets(pcap_file):
-    try:
-        packets = rdpcap(pcap_file)
-        mac_addresses = set()
-        for packet in packets:
-            if ARP in packet:
-                mac_addresses.add(packet[ARP].hwsrc)
-        
-        mac_vendor_details = {}
-        for mac_address in mac_addresses:
-            vendor = get_mac_address_vendor(mac_address)
-            mac_vendor_details[mac_address] = vendor
-        
-        return mac_vendor_details
-    except Exception as e:
-        print(f"An error occurred while analyzing ARP packets: {e}")
-        return None
+def extract_arp_info(pcap_file):
+    packets = rdpcap(pcap_file)
+    arp_info = []
+    
+    for pkt in packets:
+        if ARP in pkt:
+            arp_packet = pkt[ARP]
+            info = ARPData(
+                timestamp=pkt.time,
+                src_ip=arp_packet.psrc,
+                dst_ip=arp_packet.pdst,
+                src_mac=arp_packet.hwsrc,
+                dst_mac=arp_packet.hwdst,
+                op=arp_packet.op
+            )
+            arp_info.append(info)
+    
+    return arp_info
 
-@app.post("/analyze-pcap/")
-async def analyze_pcap(files: List[bytes] = File(...)):
-    try:
-        pcap_data = files[0]
-        with open("temp.pcap", "wb") as pcap_file:
-            pcap_file.write(pcap_data)
-        
-        result = analyze_arp_packets("temp.pcap")
-        return result
-    except Exception as e:
-        return {"error": str(e)}
+arp_data = extract_arp_info('././pcaps/trabalho2.pcap')
+
+@router.get("/trabalho2")
+def read_trabalho2():
+    return [arp.__dict__ for arp in arp_data]  # Converte objetos ARPData para dicionários
+
+app.include_router(router)
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=3001)  # Use uma porta diferente para evitar conflito com Live Server

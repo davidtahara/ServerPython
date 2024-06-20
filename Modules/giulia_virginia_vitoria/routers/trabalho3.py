@@ -1,6 +1,14 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 import scapy.all as scapy
+from fastapi import APIRouter
+
+router = APIRouter()
+
+@router.get("/trabalho3")
+def read_trabalho3():
+    return {"message": "Hello from trabalho3"}
+
 
 app = FastAPI()
 
