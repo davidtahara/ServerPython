@@ -2,24 +2,14 @@
 <html>
 <head>
     <title>Trabalho 1</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
     <script src="trabalho1.js"></script>
 </head>
 <body>
     <h1>Dados de tráfego - Protocolo IPv4</h1>
-    <h2>IPv4 Packets</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Timestamp</th>
-                <th>Source IP</th>
-                <th>Destination IP</th>
-                <th>TTL</th>
-                <th>Protocol</th>
-                <th>Length</th>
-            </tr>
-        </thead>
-        <tbody id="ip-packets-table-body">
-        </tbody>
-    </table>
+
+    <div id="protocol-chart" style="width: 650px; height: 400px;"></div>
+    <div id="ip-chart" style="width: 1000px; height: 400px;"></div>
+    
 </body>
 </html>
