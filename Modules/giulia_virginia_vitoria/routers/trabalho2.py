@@ -19,7 +19,8 @@ class ARPData:
 
 def extract_arp_info(pcap_file):
     packets = rdpcap(pcap_file)
-    arp_info = []
+    arp_requests = []
+    arp_replies = []
     
     for pkt in packets:
         if ARP in pkt:
@@ -32,17 +33,23 @@ def extract_arp_info(pcap_file):
                 dst_mac=arp_packet.hwdst,
                 op=arp_packet.op
             )
-            arp_info.append(info)
+            if arp_packet.op == 1:  # ARP Request
+                arp_requests.append(info)
+            elif arp_packet.op == 2:  # ARP Reply
+                arp_replies.append(info)
     
-    return arp_info
+    return arp_requests, arp_replies
 
-arp_data = extract_arp_info('././pcaps/trabalho2.pcap')
+arp_requests, arp_replies = extract_arp_info('././pcaps/trabalho2.pcap')
 
 @router.get("/trabalho2")
 def read_trabalho2():
-    return [arp.__dict__ for arp in arp_data]  # Converte objetos ARPData para dicionários
+    return {
+        "requests": [arp.__dict__ for arp in arp_requests],
+        "replies": [arp.__dict__ for arp in arp_replies]
+    }
 
 app.include_router(router)
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=3001)  # Use uma porta diferente para evitar conflito com Live Server
+    uvicorn.run(app, host="127.0.0.1", port=3001)  # Porta para o backend
