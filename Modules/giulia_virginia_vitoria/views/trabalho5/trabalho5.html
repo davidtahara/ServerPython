@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trabalho 5 - Dados de Tráfego TCP</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('/trabalho5') // Rota da sua aplicação FastAPI
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById("tcp-packets-table-body");
+                    data.forEach(packet => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${new Date(packet.timestamp * 1000).toLocaleString()}</td>
+                            <td>${packet.source}</td>
+                            <td>${packet.destination}</td>
+                            <td>${packet.length}</td>
+                            <td>${packet.data}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Erro ao buscar dados:', error));
+        });
+    </script>
+</head>
+<body>
+    <h1>Dados de Tráfego - Protocolo TCP</h1>
+    <h2>Pacotes TCP</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Source</th>
+                <th>Destination</th>
+                <th>Length</th>
+                <th>Data</th>
+            </tr>
+        </thead>
+        <tbody id="tcp-packets-table-body">
+            <!-- Aqui serão inseridas as linhas da tabela -->
+        </tbody>
+    </table>
+</body>
+</html>

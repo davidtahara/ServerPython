@@ -30,12 +30,12 @@ for module in modules:
     routers_path = f"{modules_path}/{module}/routers"
     if not os.path.exists(routers_path):
         continue  # Pule se a pasta de routers não existir
-    files = [f for f in listdir(routers_path) if f.endswith(".py")]
+    files = [f for f in listdir(routers_path) if f.endswith(".py") and f != "__init__.py"]
     for file in files:
-        module_name = f"Modules.{module}.routers.{file[:-3]}"
         try:
-            exec(f"from {module_name} import router")
-            exec(f"app.include_router(router)")
+            module_name = f"Modules.{module}.routers.{file[:-3]}"
+            router = __import__(module_name, fromlist=["router"]).router
+            app.include_router(router)
             print(f"Successfully included router from {module_name}")
         except Exception as e:
             print(f"Failed to include router from {module_name}: {e}")

@@ -1,69 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Trabalho 2</title>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch('http://localhost:3001/trabalho2')
-                .then(response => response.json())
-                .then(data => {
-                    const tbody = document.getElementById("rip-packets-table-body");
-                    data.requests.forEach(packet => {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `
-                            <td>${new Date(packet.timestamp * 1000).toLocaleString()}</td>
-                            <td>${packet.src_ip}</td>
-                            <td>${packet.dst_ip}</td>
-                            <td>${packet.src_mac}</td>
-                            <td>${packet.dst_mac}</td>
-                            <td>${packet.op}</td>
-                        `;
-                        tbody.appendChild(row);
-                    });
-                    data.replies.forEach(packet => {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `
-                            <td>${new Date(packet.timestamp * 1000).toLocaleString()}</td>
-                            <td>${packet.src_ip}</td>
-                            <td>${packet.dst_ip}</td>
-                            <td>${packet.src_mac}</td>
-                            <td>${packet.dst_mac}</td>
-                            <td>${packet.op}</td>
-                        `;
-                        tbody.appendChild(row);
-                    });
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        });
-    </script>
+    <title>Trabalho 3</title>
+    <script src="static/trabalho3.js"></script>
 </head>
 <body>
-    <h1>Dados de tráfego - Protocolo ARP</h1>
-    <h2>ARP Requests</h2>
+    <h1>Dados de tráfego - Protocolo RIP</h1>
+    <h2>RIP Packets</h2>
     <table border="1">
         <thead>
             <tr>
                 <th>Timestamp</th>
                 <th>Source IP</th>
                 <th>Destination IP</th>
-                <th>Source MAC</th>
-                <th>Destination MAC</th>
-                <th>Operation</th>
-            </tr>
-        </thead>
-        <tbody id="rip-packets-table-body">
-        </tbody>
-    </table>
-    <h2>ARP Replies</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Timestamp</th>
-                <th>Source IP</th>
-                <th>Destination IP</th>
-                <th>Source MAC</th>
-                <th>Destination MAC</th>
-                <th>Operation</th>
+                <th>Command</th>
+                <th>Version</th>
+                <th>Entries</th>
             </tr>
         </thead>
         <tbody id="rip-packets-table-body">

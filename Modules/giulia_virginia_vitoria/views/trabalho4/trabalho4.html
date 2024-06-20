@@ -1,55 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UDP Analysis</title>
+    <title>Trabalho 4 - Dados de Tráfego UDP</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('/trabalho4') // Rota da sua aplicação FastAPI
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById("udp-packets-table-body");
+                    data.udp_packets.forEach(packet => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${new Date(packet.timestamp * 1000).toLocaleString()}</td>
+                            <td>${packet.source}</td>
+                            <td>${packet.destination}</td>
+                            <td>${packet.length}</td>
+                            <td>${packet.data}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Erro ao buscar dados:', error));
+        });
+    </script>
 </head>
 <body>
-    <h1>UDP Analysis Results</h1>
-    <button onclick="fetchUdpAnalysis()">Analyze UDP Traffic</button>
-    <div id="results"></div>
-
-    <script>
-        async function fetchUdpAnalysis() {
-            try {
-                const response = await fetch('/udp-analysis');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch data');
-                }
-                const data = await response.json();
-                displayResults(data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        }
-
-        function displayResults(data) {
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '';
-
-            const protocols = data.Protocolos;
-            const ips = data.IPs;
-            const ports = data.Portas;
-            const totalTime = data['Tempo total'];
-
-            resultsDiv.innerHTML += '<h2>Protocolos</h2>';
-            for (const protocol in protocols) {
-                resultsDiv.innerHTML += `<p>${protocol}: ${protocols[protocol]}</p>`;
-            }
-
-            resultsDiv.innerHTML += '<h2>IPs</h2>';
-            for (const ip in ips) {
-                resultsDiv.innerHTML += `<p>${ip}: ${ips[ip]}</p>`;
-            }
-
-            resultsDiv.innerHTML += '<h2>Portas</h2>';
-            for (const port in ports) {
-                resultsDiv.innerHTML += `<p>${port}: ${ports[port]}</p>`;
-            }
-
-            resultsDiv.innerHTML += `<h2>Tempo total: ${totalTime}</h2>`;
-        }
-    </script>
+    <h1>Dados de Tráfego - Protocolo UDP</h1>
+    <h2>Pacotes UDP</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Source</th>
+                <th>Destination</th>
+                <th>Length</th>
+                <th>Data</th>
+            </tr>
+        </thead>
+        <tbody id="udp-packets-table-body">
+            <!-- Aqui serão inseridas as linhas da tabela -->
+        </tbody>
+    </table>
 </body>
 </html>

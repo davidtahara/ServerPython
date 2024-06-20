@@ -1,7 +1,6 @@
 import uvicorn
 from fastapi import FastAPI, APIRouter
-from typing import List
-from scapy.all import rdpcap, IP, UDP, RIP
+from scapy.all import rdpcap, IP, RIP
 
 router = APIRouter()
 app = FastAPI()
@@ -22,7 +21,7 @@ def extract_rip_info(pcap_file):
     rip_packets = []
     
     for pkt in packets:
-        if IP in pkt and UDP in pkt and RIP in pkt:
+        if IP in pkt and RIP in pkt:
             rip_packet = pkt[RIP]
             entries = []
             for entry in rip_packet.entries:
@@ -46,7 +45,7 @@ def extract_rip_info(pcap_file):
     
     return rip_packets
 
-# Path to your pcap file for trabalho3
+# Path to your pcap file for trabalho3 (assumindo conversão para .pcap)
 pcap_file_path = '././pcaps/trabalho2.pcap'
 
 # Chama a função extract_rip_info com o arquivo pcap desejado
