@@ -35,7 +35,7 @@ exemplo: http://localhost:3001/docs#/
 
 Para acessar as views dos protocolos basta pesquisr 
 
-127.0.0.1:5500/Modules/giulia_virginia_vitoria/views/
+127.0.0.1:5500/Modules/virginia_vitoria/views/
 
 Onde {url} é onde o FastApi está rodando no seu sistema.
 

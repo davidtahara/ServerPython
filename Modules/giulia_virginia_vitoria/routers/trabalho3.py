@@ -1,52 +1,65 @@
-from fastapi import FastAPI
-from fastapi.responses import JSONResponse
-import scapy.all as scapy
-from fastapi import APIRouter
+import uvicorn
+from fastapi import FastAPI, APIRouter
+from typing import List
+from scapy.all import rdpcap, IP, UDP, RIP
 
 router = APIRouter()
+app = FastAPI()
+
+# Classe para representar dados dos pacotes RIP
+class RIPData:
+    def __init__(self, timestamp, source, destination, command, version, entries):
+        self.timestamp = timestamp
+        self.source = source
+        self.destination = destination
+        self.command = command
+        self.version = version
+        self.entries = entries
+
+# Função para extrair informações dos pacotes RIP do arquivo pcap usando Scapy
+def extract_rip_info(pcap_file):
+    packets = rdpcap(pcap_file)
+    rip_packets = []
+    
+    for pkt in packets:
+        if IP in pkt and UDP in pkt and RIP in pkt:
+            rip_packet = pkt[RIP]
+            entries = []
+            for entry in rip_packet.entries:
+                entry_info = {
+                    'addr': entry.address,
+                    'mask': entry.subnet_mask,
+                    'metric': entry.metric,
+                    'next_hop': entry.next_hop
+                }
+                entries.append(entry_info)
+            
+            rip_data = RIPData(
+                timestamp=pkt.time,
+                source=pkt[IP].src,
+                destination=pkt[IP].dst,
+                command=rip_packet.cmd,
+                version=rip_packet.version,
+                entries=entries
+            )
+            rip_packets.append(rip_data)
+    
+    return rip_packets
+
+# Path to your pcap file for trabalho3
+pcap_file_path = '././pcaps/trabalho2.pcap'
+
+# Chama a função extract_rip_info com o arquivo pcap desejado
+rip_packets = extract_rip_info(pcap_file_path)
 
 @router.get("/trabalho3")
 def read_trabalho3():
-    return {"message": "Hello from trabalho3"}
+    global rip_packets  # Adiciona esta linha para acessar a variável rip_packets globalmente
+    return {
+        "rip_packets": [rip.__dict__ for rip in rip_packets]
+    }
 
+app.include_router(router)
 
-app = FastAPI()
-
-@app.get("/rip-analysis", response_class=JSONResponse)
-async def rip_analysis():
-    try:
-        arquivo = './pcaps/trabalho3.pcap'
-        pacotes = scapy.rdpcap(arquivo)
-
-        # Inicialização de estruturas de dados
-        ips = []
-        protocolos = {}
-        portas = {}
-
-        # Percorre cada pacote no arquivo pcap
-        for pacote in pacotes:
-            if scapy.RIP in pacote:  # Verifica se o pacote contém protocolo RIP
-                # Atualiza contadores de protocolos e portas
-                protocolos['RIP'] = protocolos.get('RIP', 0) + 1
-                if pacote.haslayer(scapy.UDP):
-                    portas[pacote[scapy.UDP].dport] = portas.get(pacote[scapy.UDP].dport, 0) + 1
-                
-                # Coleta IPs de origem
-                if pacote.haslayer(scapy.IP):
-                    ips.append(pacote[scapy.IP].src)
-
-        # Contagem de IPs
-        ips_count = {ip: ips.count(ip) for ip in set(ips)}
-
-        # Tempo total da captura
-        tempo_total = pacotes[-1].time - pacotes[0].time
-        tempo_total = round(tempo_total, 2)
-
-        return {
-            "Protocolos": protocolos,
-            "IPs": ips_count,
-            "Portas": portas,
-            "Tempo total": tempo_total
-        }
-    except Exception as e:
-        return {"error": f"An error occurred: {str(e)}"}
+if __name__ == "__main__":
+    uvicorn.run(app, host="localhost", port=3001)
