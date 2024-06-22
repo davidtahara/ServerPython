@@ -2,36 +2,17 @@ document.addEventListener("DOMContentLoaded", function() {
     fetch('http://localhost:3001/trabalho3')
         .then(response => response.json())
         .then(data => {
+            console.log('Dados recebidos:', data); // Verifica o que está sendo recebido da API
             const tbody = document.getElementById("rip-packets-table-body");
-            data.rip_packets.forEach(packet => {
+            data.forEach(packet => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                    <td>${new Date(packet.timestamp * 1000).toLocaleString()}</td>
+                    <td>${new Date(packet.time * 1000).toLocaleString()}</td>
                     <td>${packet.source}</td>
                     <td>${packet.destination}</td>
-                    <td>${packet.command}</td>
-                    <td>${packet.version}</td>
-                    <td>
-                        <table border="1">
-                            <thead>
-                                <tr>
-                                    <th>Address</th>
-                                    <th>Subnet Mask</th>
-                                    <th>Metric</th>
-                                    <th>Next Hop</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${packet.entries.map(entry => `
-                                    <tr>
-                                        <td>${entry.addr}</td>
-                                        <td>${entry.mask}</td>
-                                        <td>${entry.metric}</td>
-                                        <td>${entry.next_hop}</td>
-                                    </tr>`).join('')}
-                            </tbody>
-                        </table>
-                    </td>
+                    <td>${packet.protocol}</td>
+                    <td>${packet.length}</td>
+                    <td>${packet.info}</td>
                 `;
                 tbody.appendChild(row);
             });
