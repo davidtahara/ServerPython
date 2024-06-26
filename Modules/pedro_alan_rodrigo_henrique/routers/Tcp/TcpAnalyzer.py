@@ -13,6 +13,14 @@ class TcpAnalyzer:
         print("Pcap TCP carregado!")
 
     def get_data(self, slice_start, slice_end):
+        if (
+            slice_start < 0
+            or slice_end < 0
+            or slice_start > slice_end
+            or slice_end > len(self.packets) - 1
+        ):
+            print("Value out of range")
+            return
         data = []
         flagFrequency = {}
         window_size = {}
