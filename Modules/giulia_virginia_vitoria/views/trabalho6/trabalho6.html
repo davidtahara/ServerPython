@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trabalho 6</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <script src="trabalho6.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .chart-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dados de tráfego - Protocolo HTTP</h1>
+    <div class="analise">
+        <h2>Análise</h2>
+        <p>Os dados de tráfego HTTP foram coletados e exibidos nas tabelas abaixo. A partir desses dados, é possível analisar o comportamento da rede e identificar possíveis problemas de comunicação entre os dispositivos.</p>
+        <div>
+            <h2>Resumo de Tráfego HTTP</h2>
+            <ul>
+                <li><strong>Total de Pacotes HTTP:</strong> <span id="total-packets"></span></li>
+                <li><strong>IP de Origem Mais Frequente:</strong> <span id="most-frequent-src-ip"></span></li>
+                <li><strong>IP de Destino Mais Frequente:</strong> <span id="most-frequent-dst-ip"></span></li>
+            </ul>
+        </div>
+        <div>
+            <h2>Gráficos de Tráfego HTTP</h2>
+            <div class="chart-container">
+                <div id="http-src-ip-chart" style="width: 600px; height: 550px;"></div>
+                <div id="http-dst-ip-chart" style="width: 600px; height: 550px;"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
