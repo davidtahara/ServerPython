@@ -1,7 +1,6 @@
 import Api from "./api/Api.js";
 import BarGraph from "./charts/BarGraph.js";
 
-console.log("COMEÇou");
 const startBtn = document.getElementById("startBtn");
 
 interface Data {
@@ -74,5 +73,5 @@ startBtn?.addEventListener("click", () => {
   intervalLoop();
   setInterval(async () => {
     await intervalLoop();
-  }, 5000);
+  }, 1000);
 });

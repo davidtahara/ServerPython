@@ -13,6 +13,7 @@ from Modules.pedro_alan_rodrigo_henrique.routers.UdpDns.UdpDns import (
     UdpDns,
 )
 from Modules.pedro_alan_rodrigo_henrique.routers.Tcp.TcpAnalyzer import TcpAnalyzer
+from Modules.pedro_alan_rodrigo_henrique.routers.T4Udp.T4Udp import T4Udp
 from typing import Dict
 from fastapi import APIRouter, Query
 
@@ -24,6 +25,7 @@ rip_sniffer = RipSniffer()
 arp_discovery = ArpDiscovery("172.21.0.1/28")
 udp_dns = UdpDns()
 tcp = TcpAnalyzer()
+t4_udp = T4Udp()
 
 
 @router.get("/sniffer-reports")
@@ -89,3 +91,10 @@ def get_tcp_data(
     slice_start: int = Query(..., ge=0), slice_end: int = Query(..., ge=0)
 ):
     return tcp.get_data(slice_start, slice_end)
+
+
+@router.get("/t4-udp-data")
+def get_udp_data(
+    slice_start: int = Query(..., ge=0), slice_end: int = Query(..., ge=0)
+):
+    return t4_udp.get_data(slice_start, slice_end)
