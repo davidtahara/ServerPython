@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise do Tamanho dos Pacotes</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+<body>
+<div id="packet-analysis" style="width: 2000px; height:800px; margin: auto;"></div>
+<script>
+
+function fetchPacketSizeComparison() {
+    return fetch('http://127.0.0.1:8000/packets-sizes-comparasion')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .catch(error => {
+            console.error('Erro ao buscar dados:', error);
+            return { error: true };
+        });
+}
+
+function setupChart(data) {
+    const chartDom = document.getElementById('packet-analysis');
+    const myChart = echarts.init(chartDom);
+    const option = {
+        title: {
+            text: 'Análise do Tamanho dos Pacotes',
+            subtext: 'Comparação dos Tamanhos dos Pacotes',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            orient: 'vertical',
+            left: '5%',
+            top: '35%',
+        },
+        series: [
+            {
+                name: 'Tamanhos dos Pacotes',
+                type: 'pie',
+                radius: '50%',
+                data: [
+                    { value: data.max_size, name: 'Tamanho Máximo' },
+                    { value: data.min_size, name: 'Tamanho Mínimo' },
+                    { value: data.average_size, name: 'Tamanho Médio' },
+                    { value: data.difference_max_min, name: 'Diferença Máx-Mín' },
+                    { value: data.count_above_average, name: 'Contagem Acima da Média' },
+                    { value: data.count_below_average, name: 'Contagem Abaixo da Média' },
+                    { value: data.percentage_above_average, name: 'Percentual Acima da Média' },
+                    { value: data.percentage_below_average, name: 'Percentual Abaixo da Média' }
+                ],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+    myChart.setOption(option);
+}
+
+function updateChart() {
+    fetchPacketSizeComparison().then(data => {
+        if (data && !data.error) {
+            setupChart(data);
+        } else {
+            console.error('Sem dados ou erro:', data.error);
+        }
+    });
+}
+
+updateChart();
+setInterval(updateChart, 2000);
+
+</script>
+</body>
+</html>
