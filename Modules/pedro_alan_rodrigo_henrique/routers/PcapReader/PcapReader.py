@@ -9,7 +9,8 @@ class PcapReader:
 
     def __read_pcap(self):
         try:
-            self.packets = rdpcap(self.file_path)
+            # TODO remove limit
+            self.packets = rdpcap(self.file_path, 1000)
             return True
         except Exception as e:
             print("Error reading pcap file:", e)
