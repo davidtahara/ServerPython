@@ -1,0 +1,298 @@
+{
+    "514": {
+        "acessos": 4,
+        "nome_aplicacao": "Syslog"
+    },
+    "123": {
+        "acessos": 93,
+        "nome_aplicacao": "NTP (Network Time Protocol)"
+    },
+    "1900": {
+        "acessos": 100,
+        "nome_aplicacao": "SSDP (Simple Service Discovery Protocol)"
+    },
+    "22292": {
+        "acessos": 4,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "25366": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "2008": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "32869": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "43094": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "19999": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "14942": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "31388": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "51014": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "46096": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "12069": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "30457": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "21434": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "25994": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "36168": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "30662": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "36572": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "63328": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "21298": {
+        "acessos": 6,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "389": {
+        "acessos": 92,
+        "nome_aplicacao": "LDAP (Lightweight Directory Access Protocol)"
+    },
+    "53": {
+        "acessos": 50,
+        "nome_aplicacao": "DNS (Domain Name System)"
+    },
+    "37298": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "37702": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "62623": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "35049": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "5482": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "58311": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "59922": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "50688": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "55558": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "6874": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "61045": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "53951": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "33762": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "62482": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "9974": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "58522": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "21230": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "35203": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "41120": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "42703": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "7846": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "16608": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "8076": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "1574": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "63795": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "3366": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "26480": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "38820": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "13350": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "51011": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "44263": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "41203": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "8462": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "51407": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "2696": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "2805": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "47323": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "19506": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "6764": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "64888": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "32303": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "22265": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "23816": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "13949": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "816": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "13728": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "3760": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "29962": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "60566": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    },
+    "9621": {
+        "acessos": 1,
+        "nome_aplicacao": "Desconhecida"
+    }
+}

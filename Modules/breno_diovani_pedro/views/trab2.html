@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico de Marcas de Placas de Rede</title>
+    <!-- Incluindo a biblioteca Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div style="width: 80%; margin: auto;">
+        <canvas id="placasDeRedeChart"></canvas>
+    </div>
+
+    <script>
+        // Função para carregar o arquivo JSON e criar o gráfico
+        function carregarDadosEPlotarGrafico() {
+            // Carregar o arquivo JSON
+            fetch('trab2.json')
+                .then(response => response.json())
+                .then(data => {
+                    // Extrair marcas de placa de rede e suas quantidades
+                    const marcas = data.placas_de_rede.map(item => item.marca);
+                    const quantidades = data.placas_de_rede.map(item => item.quantidade);
+
+                    // Configurar o contexto do gráfico
+                    const ctx = document.getElementById('placasDeRedeChart').getContext('2d');
+                    const myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: marcas,
+                            datasets: [{
+                                label: 'Quantidade de Dispositivos',
+                                data: quantidades,
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar dados:', error);
+                });
+        }
+
+        // Chamada da função para carregar dados e criar o gráfico
+        carregarDadosEPlotarGrafico();
+    </script>
+</body>
+</html>

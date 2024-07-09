@@ -1,0 +1,36 @@
+{
+    "placas_de_rede": [
+        {
+            "marca": "Zhejiang Dahua Technology Co., Ltd.",
+            "quantidade": 120
+        },
+        {
+            "marca": "D-Link Corporation",
+            "quantidade": 105
+        },
+        {
+            "marca": "Beijing Xiaomi Mobile Software Co., Ltd",
+            "quantidade": 24
+        },
+        {
+            "marca": "Lumi United Technology Co., Ltd",
+            "quantidade": 2
+        },
+        {
+            "marca": "Technicolor CH USA Inc.",
+            "quantidade": 6
+        },
+        {
+            "marca": "Xiaomi Communications Co Ltd",
+            "quantidade": 4
+        },
+        {
+            "marca": "HUNAN FN-LINK TECHNOLOGY LIMITED",
+            "quantidade": 1
+        },
+        {
+            "marca": "Intel Corporate",
+            "quantidade": 10
+        }
+    ]
+}
