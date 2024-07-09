@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARP Traffic Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
+<style>
+    table, #chart {
+        width: 100%;
+        margin-top: 20px;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
+</head>
+<body>
+<h1>ARP Traffic Dashboard</h1>
+<div id="chart" style="height: 400px;"></div>
+<table id="arpTable">
+    <thead>
+        <tr>
+            <th>Source IP</th>
+            <th>Destination IP</th>
+            <th>Source MAC</th>
+            <th>Destination MAC</th>
+            <th>Operation</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script>
+    const myChart = echarts.init(document.getElementById('chart'));
+
+    function updateChart(data) {
+        const operations = data.reduce((acc, curr) => {
+            acc[curr.operation] = (acc[curr.operation] || 0) + 1;
+            return acc;
+        }, {});
+
+        const option = {
+            title: {
+                text: 'ARP Operations Count'
+            },
+            tooltip: {},
+            legend: {
+                data:['Operations']
+            },
+            xAxis: {
+                data: Object.keys(operations)
+            },
+            yAxis: {},
+            series: [{
+                name: 'Operations',
+                type: 'bar',
+                data: Object.values(operations)
+            }]
+        };
+        
+        myChart.setOption(option);
+    }
+
+    function fetchArpData() {
+        fetch('http://localhost:8000/arp-data')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('arpTable').getElementsByTagName('tbody')[0];
+                tbody.innerHTML = '';
+                data.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${row.source_ip}</td>
+                                    <td>${row.destination_ip}</td>
+                                    <td>${row.source_mac}</td>
+                                    <td>${row.destination_mac}</td>
+                                    <td>${row.operation}</td>`;
+                    tbody.appendChild(tr);
+                });
+                updateChart(data);
+            })
+            .catch(error => console.error('Error fetching ARP data:', error));
+    }
+
+  
+    fetchArpData();
+    setInterval(fetchArpData, 30000);
+</script>
+</body
