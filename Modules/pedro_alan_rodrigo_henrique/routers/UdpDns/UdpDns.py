@@ -1,5 +1,6 @@
 from scapy.all import *
 import threading
+from collections.abc import Iterable
 
 DNS_QUERY_CODE = 0
 DNS_RESPONSE_CODE = 1
@@ -9,9 +10,10 @@ class UdpDns:
     def __init__(self):
         self.__stop_sniffing = threading.Event()
         self.__dns_queries = {}
+        self.__lock = threading.Lock()
 
     def __start_sniffing(self):
-        filter_expression = "udp and port 53"
+        filter_expression = "udp port 53"
         while not self.__stop_sniffing.is_set():
             sniff(
                 prn=self.__parse_packet,
@@ -30,32 +32,34 @@ class UdpDns:
                 print(f"DNS Query: {query_name} (ID: {query_id})")
             elif dns.qr == DNS_RESPONSE_CODE:
                 query_id = dns.id
+                print(dns)
                 resolved_ips = []
-                if dns.an != None:
-                    resolved_ips = [
-                        answer.rdata for answer in dns.an if answer.type == 1
-                    ]
+                if dns.an is not None:
+                    answers = dns.an if isinstance(dns.an, Iterable) else [dns.an]
+                    resolved_ips = [answer.rdata for answer in answers]
                 self.__upsert_dns_response(query_id, resolved_ips)
                 print(
                     f"DNS Response for Query (ID: {query_id}) - Resolved IPs: {resolved_ips}"
                 )
 
     def __upsert_dns_query(self, query_name: str, query_id: str):
-        value = self.__dns_queries.get(query_name)
-        if value is None:
-            self.__dns_queries[query_name] = {
-                "lastQueryId": query_id,
-                "count": 1,
-            }
-        else:
-            self.__dns_queries[query_name]["lastQueryId"] = query_id
-            self.__dns_queries[query_name]["count"] = value["count"] + 1
+        with self.__lock:
+            value = self.__dns_queries.get(query_name)
+            if value is None:
+                self.__dns_queries[query_name] = {
+                    "lastQueryId": query_id,
+                    "count": 1,
+                }
+            else:
+                self.__dns_queries[query_name]["lastQueryId"] = query_id
+                self.__dns_queries[query_name]["count"] = value["count"] + 1
 
     def __upsert_dns_response(self, query_id: str, resolved_ips: list):
-        for key, value in self.__dns_queries.items():
-            dns_entry = self.__dns_queries[key]
-            if dns_entry["lastQueryId"] == query_id and len(resolved_ips) > 0:
-                dns_entry["resolvedIp"] = resolved_ips[0]
+        with self.__lock:
+            for key, value in self.__dns_queries.items():
+                dns_entry = self.__dns_queries[key]
+                if dns_entry["lastQueryId"] == query_id and len(resolved_ips) > 0:
+                    dns_entry["resolvedIp"] = resolved_ips[0]
 
     def start(self):
         self.__stop_sniffing.clear()
@@ -68,4 +72,5 @@ class UdpDns:
         self.__dns_queries = {}
 
     def get_dns_results(self):
-        return self.__dns_queries
+        with self.__lock:
+            return self.__dns_queries

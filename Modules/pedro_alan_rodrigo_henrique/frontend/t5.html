@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <script src="src/echarts.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+    <title>TCP Analyzer</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1 style="font-size: 2rem"><a href="/t4.html">Anterior</a> T5 - TCP Analyzer <a href="/t6.html">Próximo</a></h1>
+      <div id="flagFrequency" class="chart"></div>
+      <div id="windowSize" class="chart"></div>
+      <div id="packetError" class="chart"></div>
+      <div class="d-flex mb-2">
+        <button class="btn btn-primary me-1" id="startBtn">Start</button>
+      </div>
+    </div>
+    <script type="module" src="dist/t5.js"></script>
+    <script type="module" src="dist/charts/BarGraph.js"></script>
+  </body>
+</html>

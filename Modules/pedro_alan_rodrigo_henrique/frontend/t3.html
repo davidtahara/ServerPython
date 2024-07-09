@@ -13,22 +13,32 @@
 </head>
 <body>
   <div class="container">
-    <h2><a href="/t2.html">Anterior</a> Tabela RIP <a href="/t4.html">Próximo</a></h2>
-    <table id="ripTable" class="table table-striped">
+    <h2><a href="/t2.html">Anterior</a> T3 - Tabela RIP <a href="/t4.html">Próximo</a></h2>
+    <table id="ripTable1" class="table table-striped">
+      <h4>Pacotes para cada rede RIP do Roteador 1 (10.0.0.1)</h4>
       <thead>
         <tr>
-          <th scope="col">IP de origem</th>
-          <th scope="col">IP de destino</th>
-          <th scope="col">Porta de origem</th>
-          <th scope="col">Porta de destino</th>
-          <th scope="col">Endereço RIP</th>
-          <th scope="col">Mascara RIP</th>
-          <th scope="col">RIP Next Hop</th>
+          <th scope="col">Rede RIP</th>
+          <th scope="col">Contagem</th>
+
         </tr>
       </thead>
       <tbody> 
       </tbody>
     </table>
+    <table id="ripTable2" class="table table-striped">
+      <h4>Pacotes para cada rede RIP do Roteador 2 (10.0.0.2)</h4>
+      <thead>
+        <tr>
+          <th scope="col">Rede RIP</th>
+          <th scope="col">Contagem</th>
+        </tr>
+      </thead>
+      <tbody> 
+      </tbody>
+    </table>
+    <h4>Informações do RIP</h4>
+    <div id="ripInfo"></div>
   </div>
   <script type="module" src="dist/t3.js"></script>
 </body>
