@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "build": "tsc --watch",
+    "build": "tsc",
     "start": "live-server"
   },
   "keywords": [],
