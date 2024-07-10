@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gráfico de Contagem de Flags TCP</title>
+    <!-- Incluir Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div style="width: 80%; margin: 0 auto;">
+        <canvas id="flagsChart"></canvas>
+    </div>
+    <script >
+        document.addEventListener('DOMContentLoaded', function() {
+            // Carregar o arquivo JSON
+            fetch('flags_count.json')
+                .then(response => response.json())
+                .then(data => {
+                    // Extrair dados do JSON
+                    const labels = Object.keys(data);
+                    const values = Object.values(data);
+        
+                    // Configurar o gráfico
+                    const ctx = document.getElementById('flagsChart').getContext('2d');
+                    const flagsChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Quantidade de cada flag TCP',
+                                data: values,
+                                backgroundColor: [
+                                    'rgba(54, 162, 235, 0.4)', // Azul suave
+                                    'rgba(255, 99, 132, 0.4)', // Vermelho suave
+                                    'rgba(75, 192, 192, 0.4)', // Verde suave
+                                    'rgba(153, 102, 255, 0.4)', // Roxo suave
+                                    'rgba(255, 159, 64, 0.4)', // Laranja suave
+                                    'rgba(255, 206, 86, 0.4)' // Amarelo suave
+                                ],
+                                borderColor: [
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)',
+                                    'rgba(255, 206, 86, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            },
+                            plugins: {
+                                tooltip: {
+                                    // Exibição padrão do valor exato
+                                    displayColors: false
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error('Erro ao carregar o arquivo JSON:', error));
+        });
+        
+    </script>
+</body>
+</html>
