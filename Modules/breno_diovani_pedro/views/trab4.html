@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico de Pizza - Dados UDP</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div style="width: 50%; margin: auto;">
+        <canvas id="grafico-pizza"></canvas>
+    </div>
+
+    <script>
+        // Carregar dados do arquivo JSON
+        fetch('dados_udp.json')
+            .then(response => response.json())
+            .then(data => {
+                const labels = [];
+                const values = [];
+                for (const porta in data) {
+                    labels.push(`${porta} - ${data[porta]["nome_aplicacao"]}`);
+                    values.push(data[porta]["acessos"]);
+                }
+
+                // Configurar gráfico de pizza
+                const ctx = document.getElementById('grafico-pizza').getContext('2d');
+                const graficoPizza = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: values,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(54, 162, 235, 0.7)',
+                                'rgba(255, 206, 86, 0.7)',
+                                'rgba(75, 192, 192, 0.7)',
+                                'rgba(153, 102, 255, 0.7)',
+                                'rgba(255, 159, 64, 0.7)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'Acessos por Porta UDP'
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Erro ao carregar dados:', error));
+    </script>
+</body>
+</html>
