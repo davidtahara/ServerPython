@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Trabalho 3</title>
+        <link rel="stylesheet" href="trabalho3.css">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="trabalho3.js"></script>
+    </head>
+<body>
+    <h1>Dados de tráfego - Protocolo RIP</h1>
+    <h2>Gráfico de contagem de pacotes ao longo do tempo para cada IP de origem:</h2>
+    <p>Esse gráfico permite visualizar a frequência e o padrão de envio de pacotes de cada fonte</p>
+    <canvas id="lineChart" width="400" height="100"></canvas>
+
+    <br>
+    <h2>Distribuição de tamanhos de pacotes</h2>
+    <p>Esse gráfico mostra a quantidade total de pacotes enviados por cada tamanho de pacote.</p>
+    <canvas id="histogramChart" width="400" height="200"></canvas>
+    <h2>Pacotes RIP capturados:</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>Source IP</th>
+            <th>Destination IP</th>
+            <th>Protocol</th>
+            <th>Length</th>
+            <th>Info</th>
+        </tr>
+        </thead>
+        <tbody id="rip-packets-table-body">
+        </tbody>
+    </table>
+
+    
+</body>
+</html>

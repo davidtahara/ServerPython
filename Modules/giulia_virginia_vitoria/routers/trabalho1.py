@@ -1,48 +1,52 @@
+from fastapi import FastAPI, File, UploadFile
+from typing import List
+from scapy.all import IP, rdpcap
 from fastapi import APIRouter
-import scapy.all as scapy
+import uvicorn
 
-router = APIRouter(prefix="/trabalho1", tags=[""])
+router = APIRouter()
 
-@router.get("/analise2")
-def analise():
-    arquivo = './pcaps/pacotes.pcap'
-    pacotes = scapy.rdpcap(arquivo)
+app = FastAPI()
 
-    #ips
-    ips = []
+class IPData:
+    def __init__(self, timestamp, src_ip, dst_ip, ttl, proto, length):
+        self.timestamp = timestamp
+        self.src_ip = src_ip
+        self.dst_ip = dst_ip
+        self.ttl = ttl
+        self.proto = proto
+        self.length = length
 
-    # pega a quantidade de pacotes por protocolo
-    protocolos = {}
-    portas = {}
-    for pacote in pacotes:
-        # printa a porta do pacote
-        if pacote.haslayer(scapy.TCP):
-            portas[pacote[scapy.TCP].dport] = portas.get(pacote[scapy.TCP].dport, 0) + 1
-        if pacote.haslayer(scapy.UDP):
-            portas[pacote[scapy.UDP].dport] = portas.get(pacote[scapy.UDP].dport, 0) + 1
-        if pacote.haslayer(scapy.IP):
-            ips.append(pacote[scapy.IP].src)
-            if pacote[scapy.IP].proto in protocolos:
-                protocolos[pacote[scapy.IP].proto] += 1
-            else:
-                protocolos[pacote[scapy.IP].proto] = 1
+def extract_ip_info(pcap_file):
+    packets = rdpcap(pcap_file)
+    ip_packets = []
+    
+    for pkt in packets:
+        if IP in pkt:
+            ip_packet = pkt[IP]
+            info = IPData(
+                timestamp=pkt.time,
+                src_ip=ip_packet.src,
+                dst_ip=ip_packet.dst,
+                ttl=ip_packet.ttl,
+                proto=ip_packet.proto,
+                length=ip_packet.len
+            )
+            ip_packets.append(info)
+    
+    return ip_packets
 
-        # pega a quantidade de pacotes por ip
-        ips_count = {}
-        for ip in ips:
-            if ip in ips_count:
-                ips_count[ip] += 1
-            else:
-                ips_count[ip] = 1
+# Path to your pcapng file
+pcap_file_path = './pcaps/trabalho1.pcapng'
+ip_packets = extract_ip_info(pcap_file_path)
 
-        # pega o tempo total da captura
-        tempo_total = pacotes[-1].time - pacotes[0].time
-        # passa para segundos
-        tempo_total = round(tempo_total, 2)
-
+@router.get("/trabalho1")
+def read_trabalho1():
     return {
-        "Protocolos": protocolos,
-        "IPs": ips_count,
-        "Portas": portas,
-        "Tempo total": tempo_total
+        "ip_packets": [ip.__dict__ for ip in ip_packets]
     }
+
+app.include_router(router)
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=3001)  # Porta para o backend

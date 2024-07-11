@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trabalho 2</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <script src="trabalho2.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dados de tráfego - Protocolo ARP</h1>
+    <div class="analise">
+        <h2>Análise</h2>
+        <p>Os dados de tráfego de ARP Requests e ARP Replies foram coletados e exibidos nas tabelas acima. A partir desses dados, é possível analisar o comportamento da rede e identificar possíveis problemas de comunicação entre os dispositivos.</p>
+        <div>
+            <h2>Resumo de Tráfego ARP</h2>
+            <ul>
+                <li><strong>Total de Pacotes ARP:</strong> 109</li>
+                <li><strong>Endereço IP Mais Solicitado:</strong> 192.168.1.1</li>
+                <li><strong>MAC Address do IP 192.168.1.1:</strong> 5c:d9:98:96:8b:36</li>
+                <li><strong>Dispositivos Únicos Solicitando o IP 192.168.1.1:</strong></li>
+                <ul>
+                    <li>ZhejiangDahu_03:d7:d6</li>
+                    <li>XiaomiMobile_d5:3a:20</li>
+                    <li>ZhejiangDahu_33:e6:96</li>
+                    <li>da:a9:53:50:f0:94</li>
+                    <li>ZhejiangDahu_b7:48:38</li>
+                    <li>ZhejiangDahu_82:6d:e9</li>
+                    <li>ZhejiangDahu_82:6d:d8</li>
+                    <li>ZhejiangDahu_82:6d:dd</li>
+                    <li>ZhejiangDahu_82:6d:e7</li>
+                    <li>ZhejiangDahu_82:6d:df</li>
+                    <li>ZhejiangDahu_82:6d:f5</li>
+                </ul>
+                <li><strong>ARP Requests Duplicados:</strong> 15</li>
+                <ul>
+                    <li><strong>Descrição:</strong> ARP Requests duplicados podem indicar problemas de rede, como loops de rede, dispositivos mal configurados ou problemas de ARP cache. Monitorar esses eventos é crucial para manter a integridade e desempenho da rede.</li>
+                </ul>
+                <li><strong>Alta Frequência de ARP Requests pelo Mesmo IP:</strong> IP 192.168.1.1 solicitado 50 vezes</li>
+                <li><strong>ARP Gratuitos:</strong> 8</li>
+                <ul>
+                    <li>192.168.1.239</li>
+                    <li>192.168.1.243</li>
+                    <li>192.168.1.244</li>
+                    <li>192.168.1.245</li>
+                    <li>192.168.1.246</li>
+                    <li>192.168.1.247</li>
+                    <li>192.168.1.248</li>
+                    <li>192.168.1.249</li>
+                </ul>
+                <li><strong>Possíveis Anomalias:</strong> Tráfego excessivo de ARP Requests para 192.168.1.1 por múltiplos dispositivos.</li>
+            </ul>
+        </div>
+        <div>
+            <h2>Gráficos de Tráfego ARP</h2>
+            <div id="arp-pie-chart" style="width: 600px;height:550px;"></div>
+            <div id="arp-top-suppliers" style="width: 600px;height:550pxpx;"></div>
+        </div>
+    </div>
+</body>
+</html>

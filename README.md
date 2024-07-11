@@ -8,17 +8,17 @@ Foi escolhido utilizar o Python como linguagem da API pelo motivo da linguagem t
 
 A instalação do projeto é extremamente simples, basta ter o Python 3.1.\* instalado na máquina e rodar o seguinte comando na raiz do projeto.
 
-`pip install -r requirements.txt`
+pip install -r requirements.txt
 
 Esse comando irá instalar todas as dependências do projeto.
 
 # Rodando a API
 
-Para rodar a API é preciso entrar no arquivo **main.py** e executar o arquivo,
+Para rodar a API é preciso entrar no arquivo *main.py* e executar o arquivo,
 se estiver usando uma IDE, é preciso descobrir como a IDE roda arquivos Python,
 caso queira rodar no terminal, execute o seguinte comando:
 
-`python -u main.py`
+python -u main.py
 
 # Trabalhos
 
@@ -28,9 +28,14 @@ Lembre de adicionar dentro do arquivo de rotas, o prefixo do grupo, mesmo nome d
 
 # Documentação
 
-Para acessar a documentação do FastApi é preciso acessar a seguinte url no navegador:
+Para acessar a documentação do FastApi é preciso pesquisar a seguinte url no navegador:
 
-`{url}/docs`
+{url}/docs
+exemplo: http://localhost:3001/docs#/
+
+Para acessar as views dos protocolos basta pesquisr 
+
+127.0.0.1:5500/Modules/virginia_vitoria/views/
 
 Onde {url} é onde o FastApi está rodando no seu sistema.
 

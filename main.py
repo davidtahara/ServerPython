@@ -1,14 +1,16 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-# Pega as variaveis de ambiente
+import os
 from dotenv import load_dotenv
+from os import listdir
+from os.path import isfile, join
+
+# Carrega as variáveis de ambiente
 load_dotenv()
 
-# Váriaveis de ambiente
-import os
-porta = int(os.getenv("PORT"))
+# Variáveis de ambiente
+porta = int(os.getenv("PORT", 3001))  # Valor padrão definido para 3001 caso PORT não esteja configurada
 
 # Inicializa o FastAPI
 app = FastAPI()
@@ -21,23 +23,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Faz a importação de todos os modulos
-# Pega todas as pastas dentro de modules
-from os import listdir
-from os.path import isfile, join
-modules = listdir("Modules")
+# Importa e inclui os routers dos módulos
+modules_path = "Modules"
+modules = [f for f in listdir(modules_path) if not isfile(join(modules_path, f))]
 for module in modules:
-    if isfile(join("Modules", module)):
-        continue
-    # Pega todos os arquivos dentro da pasta "Modules.{module}.routers"
-    files = listdir(f"Modules/{module}/routers")
+    routers_path = f"{modules_path}/{module}/routers"
+    if not os.path.exists(routers_path):
+        continue  # Pule se a pasta de routers não existir
+    files = [f for f in listdir(routers_path) if f.endswith(".py") and f != "__init__.py"]
     for file in files:
-        if file.endswith(".py"):
-            # Importa o arquivo
-            exec(f"from Modules.{module}.routers import {file[:-3]}")
-
-            # Adiciona o router ao app
-            exec(f"app.include_router({file[:-3]}.router)")
+        try:
+            module_name = f"Modules.{module}.routers.{file[:-3]}"
+            router = __import__(module_name, fromlist=["router"]).router
+            app.include_router(router)
+            print(f"Successfully included router from {module_name}")
+        except Exception as e:
+            print(f"Failed to include router from {module_name}: {e}")
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="localhost", port=porta)
