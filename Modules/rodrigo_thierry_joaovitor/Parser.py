@@ -392,4 +392,4 @@ class PacketSource:
         self.allPackets, self.allPacketsDict = self.readAll()
 
 
-packetSource = PacketSource()
+# packetSource = PacketSource()

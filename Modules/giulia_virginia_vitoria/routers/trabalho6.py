@@ -39,7 +39,7 @@ def extract_http_info(pcap_file):
     
     return http_packets
 
-http_packets = extract_http_info('././pcaps/trabalho6.pcap')
+http_packets = extract_http_info('./pcaps/trabalho6.pcap')
 
 @router.get("/trabalho6")
 def read_trabalho6():

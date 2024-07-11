@@ -44,7 +44,7 @@ def extract_dns_info(pcap_file):
                 
     return dns_packets
 
-pcap_file_path = '././pcaps/dns.pcap'
+pcap_file_path = './pcaps/dns.pcap'
 dns_packets = extract_dns_info(pcap_file_path)
 
 @router.get("/trabalho7", response_model=List[DNSData])

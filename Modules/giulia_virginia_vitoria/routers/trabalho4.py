@@ -39,12 +39,12 @@ def extract_udp_info(pcap_file):
     return udp_packets
 
 # Path to your pcap file for trabalho4
-pcap_file_path = '././pcaps/trabalho4.pcap'
+pcap_file_path = './pcaps/trabalho4.pcap'
 
 # Rota para obter dados dos pacotes UDP
 @router.get("/trabalho4")
 def read_trabalho4():
-    pcap_file_path = '././pcaps/trabalho4.pcap'
+    pcap_file_path = './pcaps/trabalho4.pcap'
     udp_packets = extract_udp_info(pcap_file_path)
     return {
         "udp_packets": [udp.__dict__ for udp in udp_packets]

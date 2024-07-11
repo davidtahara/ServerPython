@@ -40,7 +40,7 @@ def extract_arp_info(pcap_file):
     
     return arp_requests, arp_replies
 
-arp_requests, arp_replies = extract_arp_info('././pcaps/trabalho2.pcap')
+arp_requests, arp_replies = extract_arp_info('./pcaps/trabalho2.pcap')
 
 @router.get("/trabalho2")
 def read_trabalho2():
