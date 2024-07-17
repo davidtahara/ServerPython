@@ -1,10 +1,11 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, APIRouter
 from fastapi.responses import HTMLResponse
 from scapy.all import rdpcap, IP, TCP
 from collections import Counter
 import json
-import uvicorn
 import os
+
+router = APIRouter(tags=["tcp"])
 
 pcap_file = os.path.join(os.path.dirname(__file__), 'tcp.pcap')
 
@@ -22,7 +23,7 @@ for packet in pacotes:
         length = len(packet)
         tcp_length_counter[length] += 1
 
-@app.get("/tcp-length-stats", response_class=HTMLResponse)
+@router.get("/", response_class=HTMLResponse)
 async def get_tcp_length_stats():
     sorted_lengths = sorted(tcp_length_counter.items(), key=lambda x: x[1], reverse=True)
     lengths = [length for length, count in sorted_lengths]
@@ -32,11 +33,11 @@ async def get_tcp_length_stats():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>TCP Length Statistics</title>
+        <title>Estatísticas de Comprimento TCP</title>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
     <body>
-        <h1>TCP Packet Length Distribution</h1>
+        <h1>Distribuição de pacotes TCP por comprimento</h1>
         <div>
             <canvas id="pie-chart"></canvas>
         </div>
@@ -81,5 +82,4 @@ async def get_tcp_length_stats():
     """
     return content
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+app.include_router(router)

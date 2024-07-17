@@ -1,16 +1,21 @@
 from scapy.all import rdpcap, IP
 from collections import Counter
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from fastapi.responses import HTMLResponse
 import json
+import os
 
-pacotes = rdpcap('trabalho1.pcap')
+app = FastAPI()
+router = APIRouter(tags=["ipv4"])
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+pcap_file = os.path.join(current_dir, 'trabalho1.pcap')
+
+pacotes = rdpcap(pcap_file)
 
 protocols = [packet[IP].proto for packet in pacotes if IP in packet]
 
 contador = Counter(protocols)
-
-app = FastAPI()
 
 nomes = {
     2: "IGMPv2",
@@ -22,9 +27,10 @@ titulos = [nomes.get(proto, f"Protocol {proto}") for proto in contador.keys()]
 valores = list(contador.values())
 
 cores = ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)']
-@app.get("/protocols", response_class=HTMLResponse)
+
+@router.get("/", response_class=HTMLResponse)
 async def get_protocols():
-    conteudo = f"""
+    content = f"""
     <!DOCTYPE html>
     <html>
     <head>
@@ -61,4 +67,6 @@ async def get_protocols():
     </body>
     </html>
     """
-    return conteudo
+    return content
+
+app.include_router(router)

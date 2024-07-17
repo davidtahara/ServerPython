@@ -1,14 +1,11 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, APIRouter
 from fastapi.responses import HTMLResponse
 from scapy.all import rdpcap, SNMP, SNMPget, SNMPnext, SNMPresponse, SNMPset, SNMPtrapv2
 from collections import Counter
-import uvicorn
 import os
 import json
-import logging
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+router = APIRouter(tags=["snmp"])
 
 pcap_file = os.path.join(os.path.dirname(__file__), 'snmp.pcap')
 
@@ -17,15 +14,12 @@ if not os.path.exists(pcap_file):
 
 app = FastAPI()
 
-@app.get("/snmp-command-stats", response_class=HTMLResponse)
+@router.get("/", response_class=HTMLResponse)
 async def get_snmp_command_stats():
-    try:
-        logger.info("Carregando pacotes do arquivo pcap")
         packets = rdpcap(pcap_file)
         
         snmp_command_counter = Counter()
 
-        logger.info("Analisando pacotes SNMP")
         for packet in packets:
             if SNMP in packet:
                 snmp_pdu = packet[SNMP].PDU
@@ -37,16 +31,15 @@ async def get_snmp_command_stats():
         commands = [cmd for cmd, count in sorted_commands]
         counts = [count for cmd, count in sorted_commands]
 
-        logger.info("Gerando conteúdo HTML para visualização")
         content = f"""
         <!DOCTYPE html>
         <html>
         <head>
-            <title>SNMP Command Frequency</title>
+            <title>Frequência de comandos SNMP</title>
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         </head>
         <body>
-            <h1>SNMP Command Frequency</h1>
+            <h1>Frequência de comandos SNMP</h1>
             <div>
                 <canvas id="bar-chart"></canvas>
             </div>
@@ -76,13 +69,6 @@ async def get_snmp_command_stats():
         </body>
         </html>
         """
-        return HTMLResponse(content=content)
-    except FileNotFoundError:
-        logger.error("Arquivo pcap não encontrado")
-        raise HTTPException(status_code=404, detail="Arquivo pcap não encontrado.")
-    except Exception as e:
-        logger.error(f"Erro ao processar arquivo pcap: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        return content
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+app.include_router(router)

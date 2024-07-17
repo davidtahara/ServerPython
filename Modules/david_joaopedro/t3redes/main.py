@@ -1,9 +1,14 @@
 from scapy.all import rdpcap, IP, UDP
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from fastapi.responses import HTMLResponse
-import json
+import os
 
-pacotes = rdpcap('RIPv2_subnet_down.pcap')
+router = APIRouter(tags=["rip"])
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+pcap_file = os.path.join(current_dir, 'RIPv2_subnet_down.pcap')
+
+pacotes = rdpcap(pcap_file)
 
 app = FastAPI()
 
@@ -19,13 +24,13 @@ for packet in pacotes:
             nodes.add(dst_ip)
             edges.add((src_ip, dst_ip))
 
-@app.get("/rip-graph", response_class=HTMLResponse)
+@router.get("/", response_class=HTMLResponse)
 async def get_rip_graph():
     content = f"""
     <!DOCTYPE html>
     <html>
     <head>
-        <title>RIP Protocol Graph</title>
+        <title>RIP Grafo</title>
         <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
         <style>
             #network {{
@@ -70,3 +75,5 @@ async def get_rip_graph():
     </html>
     """
     return content
+
+app.include_router(router)

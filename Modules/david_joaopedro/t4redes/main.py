@@ -1,10 +1,16 @@
 from scapy.all import rdpcap, IP, UDP
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from fastapi.responses import HTMLResponse
 from collections import Counter
 import json
+import os
 
-pacotes = rdpcap('udp.pcap')
+router = APIRouter(tags=["udp"])
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+pcap_file = os.path.join(current_dir, 'udp.pcap')
+
+pacotes = rdpcap(pcap_file)
 
 app = FastAPI()
 
@@ -14,7 +20,7 @@ for packet in pacotes:
     if IP in packet and UDP in packet:
         udp_port_counter[packet[UDP].dport] += 1
 
-@app.get("/udp-port-stats", response_class=HTMLResponse)
+@router.get("/", response_class=HTMLResponse)
 async def get_udp_port_stats():
     sorted_ports = sorted(udp_port_counter.items(), key=lambda x: x[1], reverse=True)
     ports = [port for port, count in sorted_ports]
@@ -24,7 +30,7 @@ async def get_udp_port_stats():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>UDP Port Statistics</title>
+        <title>UDP Port Estatísticas</title>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <style>
             table, th, td {
@@ -44,7 +50,7 @@ async def get_udp_port_stats():
         </style>
     </head>
     <body>
-        <h1>UDP Port Usage Statistics</h1>
+        <h1>Estatísticas de uso UDP Port</h1>
         <div>
             <canvas id="bar-chart"></canvas>
         </div>
@@ -94,3 +100,5 @@ async def get_udp_port_stats():
     </html>
     """
     return content
+
+app.include_router(router)

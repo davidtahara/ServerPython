@@ -1,13 +1,14 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, APIRouter
 from fastapi.responses import HTMLResponse
 from scapy.all import rdpcap, DNS, DNSQR
-import uvicorn
 import matplotlib.pyplot as plt
 import os
 from collections import Counter
 import io
 import base64
 import tldextract
+
+router = APIRouter(tags=["dns"])
 
 app = FastAPI()
 
@@ -36,9 +37,8 @@ def process_pcap(file_path):
 
     return filtered_domain_counts
 
-@app.get("/dns-traffic-stats", response_class=HTMLResponse)
+@router.get("/", response_class=HTMLResponse)
 async def get_dns_traffic_stats():
-    try:
         domain_counts = process_pcap(pcap_file)
 
         labels = list(domain_counts.keys())
@@ -58,20 +58,16 @@ async def get_dns_traffic_stats():
         <!DOCTYPE html>
         <html>
         <head>
-            <title>DNS Traffic Statistics</title>
+            <title>Estatísticas de Tráfego DNS</title>
         </head>
         <body>
-            <h1>DNS Traffic: Sites Acessados</h1>
+            <h1>Tráfego DNS : Sites Acessados</h1>
             <div>
                 <img src="data:image/png;base64,{image_base64}" />
             </div>
         </body>
         </html>
         """
-        return HTMLResponse(content=content)
+        return content
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+app.include_router(router)

@@ -1,10 +1,11 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, APIRouter
 from fastapi.responses import HTMLResponse
 from scapy.all import rdpcap, IP, TCP
 import json
-import uvicorn
 import os
 import matplotlib.pyplot as plt
+
+router = APIRouter(tags=["http"])
 
 pcap_file = os.path.join(os.path.dirname(__file__), 'http_witp_jpegs.pcap')
 
@@ -29,7 +30,7 @@ for packet in pacotes:
         lengths.append(length)
         relative_times.append(relative_time)
 
-@app.get("/http-traffic-stats", response_class=HTMLResponse)
+@router.get("/", response_class=HTMLResponse)
 async def get_http_traffic_stats():
     relative_times_str = [str(time) for time in relative_times]
     lengths_str = lengths
@@ -38,11 +39,11 @@ async def get_http_traffic_stats():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>HTTP Traffic Statistics</title>
+        <title>Estatísticas de Tráfego HTTP</title>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
     <body>
-        <h1>HTTP Traffic Length Over Time</h1>
+        <h1>Comprimento do tráfego HTTP ao longo do tempo</h1>
         <div>
             <canvas id="line-chart"></canvas>
         </div>
@@ -91,5 +92,4 @@ async def get_http_traffic_stats():
     """
     return content
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+app.include_router(router)

@@ -1,12 +1,18 @@
 from scapy.all import ARP, rdpcap
 from collections import Counter
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from fastapi.responses import HTMLResponse
 import json
 import requests
+import os
 
-packets = rdpcap('arp.pcap')
-mac_addresses = [packet.hwsrc for packet in packets if ARP in packet]
+router = APIRouter(tags=["arp"])
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+pcap_file = os.path.join(current_dir, 'arp.pcap')
+
+pacotes = rdpcap(pcap_file)
+mac_addresses = [packet.hwsrc for packet in pacotes if ARP in packet]
 counter = Counter(mac_addresses)
 
 def get_response_from_mac_api(mac_address):
@@ -37,7 +43,7 @@ manufacturer_data = Counter(details[0] for details in manufacturers_details.valu
 
 app = FastAPI()
 
-@app.get("/manufacturers", response_class=HTMLResponse)
+@router.get("/", response_class=HTMLResponse)
 async def get_manufacturers():
     labels = list(manufacturer_data.keys())
     values = list(manufacturer_data.values())
@@ -57,11 +63,11 @@ async def get_manufacturers():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Manufacturer Distribution</title>
+        <title>Distribuição de Manufatores</title>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
     <body>
-        <h1>Manufacturer Distribution</h1>
+        <h1>Distribuição de Manufatores</h1>
         <div style="width:600px;">
             <canvas id="manufacturerChart"></canvas>
         </div>
@@ -87,3 +93,5 @@ async def get_manufacturers():
     </html>
     """
     return content
+
+app.include_router(router)
